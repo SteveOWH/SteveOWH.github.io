@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>PV/WT+BT+HT技术经济性分析文章 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>PV/WT+BT+HT技术经济性分析文章</h1>
+            <p class="article-meta">
+              2023-08-30
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <figure data-type="image" tabindex="1"><img src="https://steveowh.github.io/post-images/1693359245364.png" alt="" loading="lazy"></figure>
+<p>优化的目标函数：LPSP  SSR 系统能源过剩系数<br>
+经济参数：NPV COE<br>
+环境参数： CO2排放量</p>
+<p>传统的方法求解出帕累托曲面后，然后在帕累托曲面上选一个可行的解。但是此种方法受人为因素的干扰严重，假设帕累托解集有非常多，选择受人为影响。<br>
+因此作者引入了MCDM这种方法来解决此问题。MCDM是一种运筹学的方法，多准则决策。<br>
+感觉这个文章有点烂  图也不好看，方法也没什么意义  三个目标的多目标优化+MDCM</p>
+<figure data-type="image" tabindex="2"><img src="https://steveowh.github.io/post-images/1693362693055.png" alt="" loading="lazy"></figure>
+<p>电池辅助光伏制氢<br>
+本篇文章都是用连续性变量求解的，除了更精确以为有什么其他作用吗？ 计算似乎复杂了很多。<br>
+如何求解的，产氢量跟输入功率强相关，然后系统的总成本/产氢量  = 氢价格<br>
+<img src="https://steveowh.github.io/post-images/1693362921098.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1693362933830.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1693362951652.png" alt="" loading="lazy"><br>
+两个指标  温室气体 与非生物资源枯竭<br>
+<img src="https://steveowh.github.io/post-images/1693363125559.png" alt="" loading="lazy"><br>
+烂<br>
+<img src="https://steveowh.github.io/post-images/1693363290572.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1693377646550.png" alt="" loading="lazy"><br>
+这文章一共24张图 是不是有病<br>
+两个参数  LCOE/ GI （绿色指数）<br>
+有考虑余电上网<br>
+钢厂有氢气的需求<br>
+系统架构如下所示，若风电不满足时，可以从电网购电，此时不时绿氢为黄氢气<br>
+风力发电的数据来源  希腊WF监控  SCADA系统  容量系数为30%</p>
+<p>原理与之前的ae的关于制氢成本的文章类似，电池都是为了保证电解槽的20%最低功率<br>
+<img src="https://steveowh.github.io/post-images/1693377900933.png" alt="" loading="lazy"><br>
+这个文章写的不错，但是太长了，分析的相当丰富<br>
+首先，有考虑电解槽的效率随着功率的变化情况，然后有考虑电池的退化过程<br>
+电解槽退化如下：<br>
+<img src="https://steveowh.github.io/post-images/1693378869322.png" alt="" loading="lazy"><br>
+电池退化如下：<br>
+<img src="https://steveowh.github.io/post-images/1693378889198.png" alt="" loading="lazy"><br>
+提出的绿电指数：<br>
+在传统的高电价的电中有0.36的电是绿电，低电价以及风电都是绿电<br>
+<img src="https://steveowh.github.io/post-images/1693378928215.png" alt="" loading="lazy"><br>
+系统架构的运行流程图如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1693379062922.png" alt="" loading="lazy"><br>
+结果阶段：<br>
+首先是系统运行曲线：<br>
+系统运行曲线只选取了3条 两个储能的SOC以及power from grid 可能是在前面已经表示过了风电的信息<br>
+<img src="https://steveowh.github.io/post-images/1693379124713.png" alt="" loading="lazy"><br>
+图9的结果有点奇怪，对于相同的氢容量的点，应该是有对电解槽的容量有进行扩大。<br>
+只是在相同的情况下扩大储能系统的容量，然后再新的配置参数下计算LCOE与GI<br>
+<img src="https://steveowh.github.io/post-images/1693380013429.png" alt="" loading="lazy"><br>
+不同风力发电情况下的LCEO/GI指标的 变量还有电解槽的功率以及tank的容量<br>
+<img src="https://steveowh.github.io/post-images/1693380111668.png" alt="" loading="lazy"><br>
+对电池的分析<br>
+<img src="https://steveowh.github.io/post-images/1693380177610.png" alt="" loading="lazy"></p>
+<p>同样再不同的风力等级下分析不同系统的容量对于LCOE的影响<br>
+<img src="https://steveowh.github.io/post-images/1693380264172.png" alt="" loading="lazy"><br>
+对于GI参数的影响<br>
+<img src="https://steveowh.github.io/post-images/1693380282965.png" alt="" loading="lazy"><br>
+下面的图都有点重复，跟上面的结果相近，但是展示效果更好<br>
+<img src="https://steveowh.github.io/post-images/1693380578222.png" alt="" loading="lazy"><br>
+跟上面的结果有点重复？<br>
+考虑买卖电价的影响<br>
+<img src="https://steveowh.github.io/post-images/1693380994052.png" alt="" loading="lazy"><br>
+考虑储氢罐的影响<br>
+<img src="https://steveowh.github.io/post-images/1693381014981.png" alt="" loading="lazy"><br>
+考虑电池成本的影响<br>
+<img src="https://steveowh.github.io/post-images/1693381038180.png" alt="" loading="lazy"><br>
+政策激励，购电电价的影响<br>
+<img src="https://steveowh.github.io/post-images/1693381173543.png" alt="" loading="lazy"><br>
+不同电解槽尺寸下 电价影响<br>
+<img src="https://steveowh.github.io/post-images/1693381216010.png" alt="" loading="lazy"><br>
+不同电价下储氢罐容量的影响<br>
+<img src="https://steveowh.github.io/post-images/1693381252231.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1693383361297.png" alt="" loading="lazy"><br>
+用python 开发了一个新的电解槽模型，并用了MCphy Energy 公司的电解槽真实数据进行了修正<br>
+系统架构如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1693383347352.png" alt="" loading="lazy"><br>
+只考虑极化曲线的线性部分，额定功率为极化曲线的最大功率。<br>
+温度以及运行年限对于极化曲线的影响<br>
+<img src="https://steveowh.github.io/post-images/1693383647989.png" alt="" loading="lazy"><br>
+退化模型包括时间退化以及热退化？<br>
+<img src="https://steveowh.github.io/post-images/1693383739674.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1693445124866.png" alt="" loading="lazy"><br>
+关于中国的评估，但是是评估的氢负荷，不涉及氢-电的过程，<br>
+同时考虑了售电和售氢的情况</p>
+<p>系统架构：<br>
+<img src="https://steveowh.github.io/post-images/1693445304314.png" alt="" loading="lazy"></p>
+<p>天气数据来源：<br>
+https://power.larc.nasa.gov/data-access-viewer/</p>
+<p>如何通过辐射计算GHI<br>
+<img src="https://steveowh.github.io/post-images/1693445552905.png" alt="" loading="lazy"><br>
+成本差距较大啊  电解槽成本为6900 储氢罐成本为6600<br>
+成本信息<br>
+<img src="https://steveowh.github.io/post-images/1693446164102.png" alt="" loading="lazy"></p>
+<p>系统设置：<br>
+<img src="https://steveowh.github.io/post-images/1693446314241.png" alt="" loading="lazy"><br>
+系统设置的是相同的电池与相同的wind pv ，电解槽也是相同的功率但是氢气的负荷不同<br>
+考虑售氢与售电</p>
+<p><img src="https://steveowh.github.io/post-images/1693447360857.png" alt="" loading="lazy"><br>
+数据集的影响？<br>
+两个数据集ERA-5  MERRA-2        SCADA<br>
+电力系统模型为PLEXOS</p>
+<p><img src="https://steveowh.github.io/post-images/1693448037055.png" alt="" loading="lazy"><br>
+分析 框架文章<br>
+系统设置<br>
+<img src="https://steveowh.github.io/post-images/1693448081002.png" alt="" loading="lazy"></p>
+<p>建筑能源分析<br>
+不确定性框架<br>
+能源管理优化<br>
+如何建模不确定性能力</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/xin-fu-wu-qi-zhi-ling/">
+                <h3 class="post-title">
+                  新服务器指令
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Transformer相关论文 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Transformer相关论文</h1>
+            <p class="article-meta">
+              2023-07-01
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h1 id="transformer整体结构">Transformer整体结构</h1>
+<p><img src="https://steveowh.github.io/post-images/1688215187724.png" alt="" loading="lazy"><br>
+Transformer由<strong>Encoder</strong> 和<strong>Decoder</strong>两个部分组成，<strong>Encoder</strong>和<strong>Decoder</strong>都包含6个Block。Transformer的工作流程大体如下所示：</p>
+<h1 id="什么是embedding">什么是Embedding</h1>
+<p>Embedding 层主要是用作降维度/升维度的，相对于传统的<strong>one-hot编码</strong><br>
+<strong>Embedding 是一种映射，但是同时可以改变输入信息的维度</strong><br>
+<strong>首先</strong>，输入句子的每一个单词的表示向量 <code>X</code>,<code>X</code>由单词语义的Embedding和单词的位置Embedding相加表示。<br>
+<img src="https://steveowh.github.io/post-images/1688215701662.png" alt="" loading="lazy"><br>
+<strong>然后</strong>，将得到的单词表示矩阵向量传入Encoder block，得到句子所有单词编码信息矩阵C，如下图所示，单词向量矩阵用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>X</mi><mrow><mi>n</mi><mo>×</mo><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{n×d}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.891661em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">×</span><span class="mord mathdefault mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span>表示，n是句子中的单词个数，d是表示向量的维度，<strong>每一个Encoder block</strong>输出的矩阵维度与输入完全一致。<br>
+<img src="https://steveowh.github.io/post-images/1688215951439.png" alt="" loading="lazy"><br>
+<strong>然后</strong>，将Encoder 的输出<code>C</code>传递到Decoder中，Decoder一次会根据当前翻译过的单词1~i翻译下一个单词i+1，如图所示，在翻译词i时，需要用Mask操作遮盖住i+1之后的单词。Decoder接受从Encoder输出的编码矩阵<code>C</code>后，首先输入翻译开始符**<begin><strong>,Decoder模块输出预测的单词<code>I</code>,下一步，输入翻译开始符</strong><begin><strong>和</strong>I**。<br>
+<img src="https://steveowh.github.io/post-images/1688216132253.png" alt="" loading="lazy"></p>
+<h1 id="transformer的输入">Transformer的输入</h1>
+<p>Transformer中单词的输入表示<code>X</code>,由单词的语义Embedding和单词的位置Embedding相加得到。<br>
+<img src="https://steveowh.github.io/post-images/1688216537197.png" alt="" loading="lazy"><br>
+1.单词语义Embedding：<br>
+单词的语义Embedding有很多方式获取。Word2Vec、Glove等算法预训练得到。也可以使用Transformer方法。<br>
+2.单词位置Embedding<br>
+单词的位置Embedding表示单词出现在句子中的位置，用<strong>位置Embedding表示单词在序列中的相对位置或者绝对位置</strong>，用PE表示位置Embedding，pos表示单词在句子中的位置，d表示PE的总维度，2i表示偶数的维度，2i+1表示奇数的维度。这种方式更容易计算，例如需要计算<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>E</mi><mo>(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>+</mo><mi>k</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">PE(pos+k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span>，可以使用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>E</mi><mo>(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">PE(pos)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathdefault">p</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mclose">)</span></span></span></span>计算，因为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>S</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>A</mi><mo>+</mo><mi>B</mi><mo>)</mo><mo>=</mo><mi>S</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>A</mi><mo>)</mo><mi>C</mi><mi>o</mi><mi>s</mi><mo>(</mo><mi>B</mi><mo>)</mo><mo>+</mo><mi>C</mi><mi>o</mi><mi>s</mi><mo>(</mo><mi>A</mi><mo>)</mo><mi>S</mi><mi>i</mi><mi>n</mi><mo>(</mo><mi>B</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Sin(A+B) =Sin(A)Cos(B)+Cos(A)Sin(B)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mopen">(</span><span class="mord mathdefault">A</span><span class="mclose">)</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mclose">)</span></span></span></span><br>
+<img src="https://steveowh.github.io/post-images/1688216761466.png" alt="" loading="lazy"></p>
+<p>#Self-Attention(自注意力机制)<br>
+<img src="https://steveowh.github.io/post-images/1688217065600.png" alt="" loading="lazy"><br>
+Transformer的内部结构图，左侧为Encoder block，右侧为Decoder block，红圈中是<strong>Muti-head attention（由多个 self-attention组成）</strong>，<strong>Encoder中包含一个Muti-head attention</strong>，<strong>Decoder中包含两个Muti-head attention，一个是masked Muti-head attention</strong>，<strong>Muti-head attention</strong>上方还包括一个Add&amp;Norm，Add表示残差链接（Residual Connection）用于防止网络退化，Norm表示Layer Normalization，用于对每一层的激活值进行归一化。<br>
+self-attention 是Transformer的重点，我们关注Multi-Head Attention以及self-Attention。</p>
+<h1 id="self-attention结构">Self - Attention结构</h1>
+<p>计算时需要用到矩阵<strong>Q(查询)，K(键值)，V(值)</strong><br>
+<img src="https://steveowh.github.io/post-images/1688218118240.png" alt="" loading="lazy"></p>
+<h1 id="计算q-k-v值">计算Q、K、V值</h1>
+<p>self-attention的输入用矩阵X表示，使用线性变换矩阵WQ、WK、WV计算得到Q、K、V<br>
+X、Q、K、V每一行都代表一个单词。<br>
+<img src="https://steveowh.github.io/post-images/1688219645736.png" alt="" loading="lazy"><br>
+#self-attention 输出<br>
+self -attention的计算公式如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1688219704111.png" alt="" loading="lazy"><br>
+公式中计算矩阵Q和K的内积，为了防止计算结果过大，除以<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">d_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的平方根，得到的矩阵行列都是n，n是单词数量。此矩阵可以表示不同单词之间的attention强度。计算过程如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1688219759434.png" alt="" loading="lazy"><br>
+得到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">QK^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.035771em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">Q</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span>后，使用<code>softmax</code>计算每一个单词对于其他单词的attention系数，对矩阵的每一行进行softmax，即每一行的和都变为1。<br>
+<img src="https://steveowh.github.io/post-images/1688219946352.png" alt="" loading="lazy"><br>
+得到softmax矩阵之后可以和<strong>V</strong>矩阵相乘，得到最终的输出<strong>Z</strong>。<br>
+<img src="https://steveowh.github.io/post-images/1688219992776.png" alt="" loading="lazy"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Z</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Z_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>计算过程如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1688220157273.png" alt="" loading="lazy"><br>
+#multi head attention<br>
+multi head attention是由多个self -attention组成的<br>
+<img src="https://steveowh.github.io/post-images/1688220241930.png" alt="" loading="lazy"><br>
+multi head attention相当于将X输入多个self -attention，然后将多个self-attention的输出拼接起来作为multi head attention的输出。<br>
+假设一个multi head attention 由8个self attention组成，计算过程如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1688220430538.png" alt="" loading="lazy"><br>
+然后得到8个self-attention的输出，然后将将8个self-attention拼接到一起，作为multi head attention的输出。<br>
+<img src="https://steveowh.github.io/post-images/1688220484879.png" alt="" loading="lazy"><br>
+#Encoder结构<br>
+<img src="https://steveowh.github.io/post-images/1688220525105.png" alt="" loading="lazy"><br>
+encoder结构中经过multi head attention，还需要经过一个Add&amp;Norm、Feed Forward、Add&amp;Norm组成。<br>
+Add&amp;Norm层由Add和Norm两部分组成，其中计算公式如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1688220648535.png" alt="" loading="lazy"><br>
+X表示multi head attention或Feed Forward的输入，由于X输入与其对应的multi head attention 或 Feed Forward的输出维度相同，所以可以直接相加。<br>
+Add是一种残差链接<br>
+<img src="https://steveowh.github.io/post-images/1688220819463.png" alt="" loading="lazy"><br>
+Norm是将每一层的神经元的输入转换成均值与方差都一样的，可以加快收敛。</p>
+<h1 id="feed-forward">Feed Forward</h1>
+<p>Feed Forward 使用两个全连接层，第一层激活函数为Rule，第二次不使用激活函数。<br>
+<img src="https://steveowh.github.io/post-images/1688220882060.png" alt="" loading="lazy"><br>
+通过将multi head attention feed forward  add&amp;norm组合，可以组成一个Encoder block<br>
+<img src="https://steveowh.github.io/post-images/1688220986815.png" alt="" loading="lazy"><br>
+同理，可以组成Decoder部分。<br>
+<img src="https://steveowh.github.io/post-images/1688221028676.png" alt="" loading="lazy"><br>
+但是输入有所区别。<br>
+#使用Mask 的 multi head attention<br>
+Decoder 中第一个multi head attention 使用了Masked操作，Masked是掩盖后面的信息，使得网络仅知道当前的信息。Decoder根据之前的预测，输出下一个预测的结果。<br>
+<img src="https://steveowh.github.io/post-images/1688221193899.png" alt="" loading="lazy"><br>
+Decoder的输入矩阵和Mask矩阵，输入矩阵包含句子的所有信息，需要使用Masked矩阵进行掩码。操作如下所示，注意Masked操作需要在self attention 的softmax操作前使用：<br>
+<img src="https://steveowh.github.io/post-images/1688221333610.png" alt="" loading="lazy"><br>
+self attention 中的softmax操作如下所示，即与<code>V</code>相乘之前：<br>
+<img src="https://steveowh.github.io/post-images/1688221364312.png" alt="" loading="lazy"><br>
+计算过程：<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi><mo>∗</mo><msup><mi>K</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">Q*K^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">Q</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span>:<br>
+<img src="https://steveowh.github.io/post-images/1688221439475.png" alt="" loading="lazy"><br>
+计算完<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">QK^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.035771em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">Q</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span>后，进行masked操作，然后进行softmax操作：<br>
+<img src="https://steveowh.github.io/post-images/1688221483845.png" alt="" loading="lazy"><br>
+然后使用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>a</mi><mi>s</mi><mi>k</mi><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">mask QK^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.035771em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord mathdefault">Q</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span>与V相乘，得到输出Z：<br>
+<img src="https://steveowh.github.io/post-images/1688221560687.png" alt="" loading="lazy"><br>
+对于multi head attention 操作，将X输入多个self attention中，然后将输出的结果拼接起来。<br>
+#输出<br>
+Decoder最后一层是预测下一个单词，在之前的网络层可以得到一个最终的输出Z，但是由于Mask存在，在单词0处，只有单词0的信息：<br>
+<img src="https://steveowh.github.io/post-images/1688221772300.png" alt="" loading="lazy"><br>
+softmax 根据输出矩阵的每一行 预测下一个单词：<br>
+<img src="https://steveowh.github.io/post-images/1688221806815.png" alt="" loading="lazy"></p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/lstm-yuan-li/">
+                <h3 class="post-title">
+                  LSTM原理
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

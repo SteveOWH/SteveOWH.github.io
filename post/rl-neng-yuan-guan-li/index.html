@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>RL能源管理 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>RL能源管理</h1>
+            <p class="article-meta">
+              2023-08-10
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <ol>
+<li></li>
+</ol>
+<p><img src="https://steveowh.github.io/post-images/1691637861188.png" alt="" loading="lazy"><br>
+RL 避免了能源管理需要精确的数学模型的必要性。<br>
+两个不可避免的问题，一是计划经济的不可行，因为负荷受人的行为影响严重；二是对于家庭中的设备的具体模型位置，不能精确的控制。</p>
+<p>使用的是model-free方法的RL<br>
+RL方法的优势：</p>
+<ol>
+<li>避免了精确数学模型的必要性、不需要先验知识，可以应对准确建模系统很困难或者成本很高情况</li>
+<li>实时性</li>
+</ol>
+<p>尽管DQN类在能源管理方面有着众多的研究，但是i对于DQNN在连续状态空间能源管理下的离散化动作，阻碍了处理多维动作空间能量管理的问题。<br>
+因此本文用DDPG处理。</p>
+<p>DDPG虽然能够一定程度上解决问题，但是还是存在一定的影响。</p>
+<ol>
+<li>
+<p>在随机和不确定环境中发现状态东顾总空间非常耗时，稀疏奖励问题<br>
+reward shaping 提高RL 算法性能</p>
+<p>通过实际运行数据的数值模拟实验 验证了RS-ACDRL算法在住宅能源管理中的有效性。<br>
+系统架构如下所示；<br>
+<img src="https://steveowh.github.io/post-images/1691649721602.png" alt="" loading="lazy"></p>
+</li>
+</ol>
+<ul>
+<li>对于负荷的分类： 1：不可安排的负荷；2：可安排的负荷。<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>C</mi><mi>n</mi><mi>t</mi></msubsup></mrow><annotation encoding="application/x-tex">C^{t}_{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040556em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7935559999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span> = 0 代表 n设备 在t时刻是运行的状态；<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>C</mi><mi>n</mi><mi>t</mi></msubsup></mrow><annotation encoding="application/x-tex">C^{t}_{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040556em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7935559999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span> = 1 代表 n设备 在t时刻是停止的状态；<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>T</mi><mi>n</mi><mrow><mi>i</mi><mi>n</mi><mi>i</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">T^{ini}_{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.071664em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.824664em;"><span style="top:-2.4530000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span>代表任务的起始时间；<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>T</mi><mi>n</mi><mrow><mi>e</mi><mi>n</mi><mi>d</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">T^{end}_{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.096108em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-2.4530000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span>代表任务的结束时间；<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>E</mi><mi>n</mi><mi>t</mi></msubsup></mrow><annotation encoding="application/x-tex">E^t_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.040556em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7935559999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span>代表n设备完成t时刻任务消耗的能量</li>
+</ul>
+<p>对于不可调度负荷<br>
+<img src="https://steveowh.github.io/post-images/1691650078350.png" alt="" loading="lazy"><br>
+对于可调度负荷</p>
+<ol>
+<li>可移动负荷<br>
+<img src="https://steveowh.github.io/post-images/1691650216247.png" alt="" loading="lazy"></li>
+<li>可控制负荷<br>
+<img src="https://steveowh.github.io/post-images/1691650284492.png" alt="" loading="lazy"><br>
+<strong>state设置</strong><br>
+<img src="https://steveowh.github.io/post-images/1691650511644.png" alt="" loading="lazy"><br>
+状态里面有load信息，t，price（24小时内的）<br>
+<strong>ACTION 设置</strong><br>
+<img src="https://steveowh.github.io/post-images/1691650624505.png" alt="" loading="lazy"><br>
+控制的是3中负荷的系数<br>
+<strong>Reward 部分</strong><br>
+<img src="https://steveowh.github.io/post-images/1691650884089.png" alt="" loading="lazy"><br>
+<strong>系统架构</strong><br>
+<img src="https://steveowh.github.io/post-images/1691651418848.png" alt="" loading="lazy"></li>
+</ol>
+<p>存在的问题：<strong>如何使用的真实数据做的数值模拟</strong></p>
+<figure data-type="image" tabindex="1"><img src="https://steveowh.github.io/post-images/1694479461634.png" alt="" loading="lazy"></figure>
+<p>多智能体能源管理<br>
+自主能源管理（AEM） 住宅多载波能源系统（RMES）<br>
+AEM的三种形式<br>
+centralized 被控的设备没有数据处理能力  控的是负荷 分布式的太多，很多设备耦合，难以求解<br>
+gap ： 脆弱的通信能力以及弱隐私保护问题</p>
+<p>distributed</p>
+<p>decentralized<br>
+CTDE 框架<br>
+系统设置：<br>
+<img src="https://steveowh.github.io/post-images/1694480866690.png" alt="" loading="lazy"></p>
+<p>优化流程：<br>
+<img src="https://steveowh.github.io/post-images/1694480888230.png" alt="" loading="lazy"><br>
+确定容量下可以与电网双向交易<br>
+设备操作是按照分钟级别的做的，然后购电量是按照小时级别的去做的</p>
+<p>可以使用两个actor网络更新，联合的动作是（action1，action2），网络设置<br>
+<img src="https://steveowh.github.io/post-images/1694481487496.png" alt="" loading="lazy"><br>
+其中actor网络有4个 分别输出购电、热的容量（24h take action 一次），以及具体设备的操作，action</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/ning-de-shi-dai-fen-xi/">
+                <h3 class="post-title">
+                  宁德时代分析
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

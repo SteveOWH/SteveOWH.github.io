@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>IJCAI2023  | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>IJCAI2023 </h1>
+            <p class="article-meta">
+              2023-10-08
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://steveowh.github.io/post-images/1696746782871.png" alt="" loading="lazy"><br>
+安全RL<br>
+因为RL的exploration问题存在典型的不安全因素，因此在现实世界中RL的使用收到了非常大的限制。<br>
+如何实现RL的safety，有两种方法，</p>
+<ol>
+<li>第一种是通过对于objective 进行修改，在学习的目标种耦合safety的因素。</li>
+<li>第二种是通过添加显示的约束来确保exploration的过程就是安全的<br>
+本文针对的是第二种过程，添加约束会对环境进行修饰，导致policy很脆弱，鲁棒性太差，本片文章就是如何<strong>提高添加修饰约束后的safety RL 如何保证鲁棒性</strong>。<br>
+作者提出了一种AdvEx-RL 通过一个AdvEx-RL网络，去学习危险的动作，然后通过一个对抗网络去学习一个去掉危险动作的安全动作。<br>
+通过一个网络去评估在state下的action 的安全性能指标，去发现可能的危险动作。<br>
+Q-risk 安全行为估计器<br>
+之前的Q-risk 通过human-supervised进行训练，或者通过用之前pre-trianing 的数据进行训练，<br>
+本文提出了一种训练一个对抗的critic network 进行训练<br>
+对于约束下的MDP过程（CMDP）<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>S</mi><mo separator="true">,</mo><mi>A</mi><mo separator="true">,</mo><mi>u</mi><mo separator="true">,</mo><mi>P</mi><mo>(</mo><mi mathvariant="normal">‘</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">‘</mi><mo>)</mo><mo separator="true">,</mo><mi>R</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">,</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">(S,A,u,P(`|`),R,y,C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">A</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord">‘</span><span class="mord">∣</span><span class="mord">‘</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi><mo>=</mo><mrow><msub><mi>c</mi><mi>i</mi></msub><mo>=</mo><mi>S</mi><mi mathvariant="normal">✖</mi><mi>A</mi><mo>→</mo><mi>R</mi><mo>≥</mo><mn>0</mn></mrow></mrow><annotation encoding="application/x-tex">C={c_{i} =S✖A→R≥0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord">✖</span><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">0</span></span></span></span></span> C 是约束<br>
+<img src="https://steveowh.github.io/post-images/1696752340588.png" alt="" loading="lazy"><br>
+train 3个policy <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>a</mi><mi>d</mi><mi>v</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{adv}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">d</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">v</span></span></span></span></span></span></span></span></span></span></span></span>,<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>s</mi><mi>a</mi><mi>f</mi><mi>e</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{safe}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight" style="margin-right:0.10764em;">f</span><span class="mord mathdefault mtight">e</span></span></span></span></span></span></span></span></span></span></span></span>,<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>t</mi><mi>a</mi><mi>s</mi><mi>k</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{task}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span>,正常情况下通过<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>t</mi><mi>a</mi><mi>s</mi><mi>k</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{task}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span>进行决策，然后训练一个<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>a</mi><mi>d</mi><mi>v</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{adv}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">d</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">v</span></span></span></span></span></span></span></span></span></span></span></span>以及<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Q</mi><mrow><mi>s</mi><mo separator="true">,</mo><mi>a</mi></mrow></msup></mrow><annotation encoding="application/x-tex">Q^{s,a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span></span></span></span>来学习危险的动作,每次选择动作的时候先通过<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>t</mi><mi>a</mi><mi>s</mi><mi>k</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{task}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span>选择动作，然后通过<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>a</mi><mi>d</mi><mi>v</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{adv}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">d</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">v</span></span></span></span></span></span></span></span></span></span></span></span>学到的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Q</mi><mrow><mi>s</mi><mo separator="true">,</mo><mi>a</mi></mrow></msup></mrow><annotation encoding="application/x-tex">Q^{s,a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">a</span></span></span></span></span></span></span></span></span></span></span></span>对a进行评估，当Q（s，a）大于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>T</mi><mrow><mi>s</mi><mi>a</mi><mi>f</mi><mi>e</mi><mi>t</mi><mi>y</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{safety}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight" style="margin-right:0.10764em;">f</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>时，此时将action置换成<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>s</mi><mi>a</mi><mi>f</mi><mi>e</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{safe}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8491079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight" style="margin-right:0.10764em;">f</span><span class="mord mathdefault mtight">e</span></span></span></span></span></span></span></span></span></span></span></span>选择的action 来将agent恢复到安全的领域。<br>
+假设已经学到了一个最优的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>a</mi><mi>d</mi><mi>v</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{adv}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">d</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">v</span></span></span></span></span></span></span></span></span></span></span></span>，然后通过增加任意<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span>到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>a</mi><mi>d</mi><mi>v</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{adv}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="mord mathdefault mtight">d</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">v</span></span></span></span></span></span></span></span></span></span></span></span>的KL散度，会使<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span>更加安全。</li>
+</ol>
+<p><img src="https://steveowh.github.io/post-images/1696754507120.png" alt="" loading="lazy"><br>
+如何实现超大规模的交通信号灯控制？<br>
+gap：传统的交通灯控制问题将agent全部同质化或者全部异质化，全部同质话会导致交通灯信系统过于简单，全部异质化会导致网络参数过于复杂。<br>
+本文提出了一种思路，是对agent进行分类 然后给相同类别的赋予相同的policy<br>
+<img src="https://steveowh.github.io/post-images/1696755114037.png" alt="" loading="lazy">       首先对于交通网络进行建模Graph图模型，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>G</mi><mo>=</mo><mrow><mi>V</mi><mo separator="true">,</mo><mi>E</mi></mrow></mrow><annotation encoding="application/x-tex">G={V,E}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.22222em;">V</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span></span></span></span></span>，V是 路口，然后E是路口的道路链接情况。<br>
+agent是每个路口的交通灯状态，action就是控制交通灯的红绿黄。<br>
+状态分为两种：</p>
+<ol>
+<li>静态特征：车道数量、长度、限速、道路类型、当地的道路拓扑结构</li>
+<li>动态特征：实时的交通流以及当前的信号相位<br>
+如何实现大规模的交通灯信号控制，先对agent进行聚类，然后相同的类别相同的policy，如何确定policy pool？，<br>
+应该是先预设了最高的种群个数，然后再实时的进行聚类根据分类的结果mapping不同的policy给每个group的agent。<br>
+<img src="https://steveowh.github.io/post-images/1696813045756.png" alt="" loading="lazy"><br>
+因果推断的可解释性RL<br>
+为什么RL难以解释呢，因为我们的reward是考虑的long term reward，action对于future reward/state的影响是未知的。<br>
+通过因果关系指导RL的学习过程难以平衡解释和学习性能的利益冲突。传统的world model一般都是一个全连接的网络构成，难以解释中间过程的因果关系，本文提出了一种非密集、非全连接层的网络进行预测。<br>
+之前的XRL很少有解决连续动作的，本文可以解决连续动作下的XRL<br>
+causal 是通过 exogenous variables 解释 endogenous</li>
+</ol>
+<p><img src="https://steveowh.github.io/post-images/1696814922372.png" alt="" loading="lazy"><br>
+本文解决的是交通网络调度的过程中会存在的 部分observation不可观测/缺失的情况下如何调度的问题。<br>
+输入稀疏观测问题。<br>
+研究的是状态或reward缺失的情况如何调度的问题。<br>
+之前的方法是通过一个approximatly function进行近似，通过一个network进行预测没有得到的obs或者reward。<br>
+<strong>是有一些agent没有observation 或者reward 的情况</strong><br>
+本文提出的方法是通过Model-based 方法解决这一类的问题。<br>
+在<code>get_action</code>的时候，假设agent有observation，则是通过observation input actor net 去输出action，假设agent没有observation，则是通过一个inferred state，输入到actor net<br>
+在 <code>training</code>阶段，从buffer 中提取信息，不仅仅需要 s 还需要reward，对于不可观测的observation，reward 仍是通过infererd出来的。</p>
+<p><img src="https://steveowh.github.io/post-images/1696816806285.png" alt="" loading="lazy"><br>
+作者假定了几种情况<br>
+一种是没有observation的agent 采用fixed time 或者 Max pressure 的进行优化<br>
+另一种是对缺失的state 进行 imputation 然后与有observation的agent 进行 shared para，<br>
+还有一种是进行agent 分类有observation的一类，没有observation的一类，imputation的时候直接预测r与s，<br>
+还有就是完全share para的一类<br>
+还有就是加了rollout的完全share para的一类</p>
+<p><img src="https://steveowh.github.io/post-images/1696817430962.png" alt="" loading="lazy"><br>
+zero-shot generalization 零样本泛化问题<br>
+如何提高RL在动态env中的泛化性能<br>
+机器学习的方法不仅仅应该能够处理好training data 的问题，同样也应该能够很好的处理在training data 中没有的情况，out-of-distribution generalization 问题。<br>
+提出的方法是CROP compact reshaped observation processing，<br>
+就是通过减少observation中的不相关信息，来只学习跟reward最相关的信息，以此来提高policy<br>
+的泛化性能。<br>
+在ML的训练过程中只有在每个training data都是独立同分布的，才能确保在后面的环节有更好work<br>
+如何提高RL robustness和generalization，一种就是通过human指导agent，或者在新的env中再重新train agent，另一种是train 一个adversarial agent 来最小化long-term reward 最终执行策略的时候是通过train的policy +adversarial policy 的联合policy指导action的选择。<br>
+另一种是通过避免对于training data 的overfitting</p>
+<p>本文的做法是对state 进行一个CROP 转换成<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>S</mi><mtext> </mtext></msup></mrow><annotation encoding="application/x-tex">S^{~}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.363em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mspace nobreak mtight"><span class="mtight"> </span></span></span></span></span></span></span></span></span></span></span></span></span>,然后后面进行train 以及take action的时候都是根据<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>S</mi><mtext> </mtext></msup></mrow><annotation encoding="application/x-tex">S^{~}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.363em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mspace nobreak mtight"><span class="mtight"> </span></span></span></span></span></span></span></span></span></span></span></span></span>,进行。<br>
+<img src="https://steveowh.github.io/post-images/1696819200165.png" alt="" loading="lazy"><br>
+然后作者做了几种不同的CROP方法然后进行实验<br>
+<img src="https://steveowh.github.io/post-images/1696819454564.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1696819542991.png" alt="" loading="lazy"><br>
+解决RL方法的learning stability and performance，本文通过提出一种新的ensemble DRL来解决此问题。<br>
+感觉是把多个单智能体集成一个多智能体学习方法，去解决单智能体的任务。<br>
+ED2算法的改进</p>
+<p><strong>多智能体相关</strong><br>
+<img src="https://steveowh.github.io/post-images/1696832267012.png" alt="" loading="lazy"><br>
+MARL任务中，大部分主要解决的是同步博弈问题，simultaneous actions of all agents in Markov game framework。本文研究的是异步序列决策问题，即Stackelberg equilibrium 问题<br>
+允许 asymmentric training with symmetric execution<br>
+在MARL中在一般的非zero-sum博弈中求解nash equilibrium 是一个非常困难的事情。因此本文去研究Stackelberg equilibrium （leader -follower问题）问题。<br>
+主要的两个问题，在Markov框架下，agent是同步执行action的，如何收敛到异步的情况，以及如何处理more than two agents 的情况。<br>
+<img src="https://steveowh.github.io/post-images/1696838641012.png" alt="" loading="lazy"><br>
+会存在leader 与follower<br>
+leader最大化自己的目标，在leader的case，默认follower会最大化leader的需求 follower会提供best response。<br>
+follower会最大化在leader action 下的long-term reward<br>
+<img src="https://steveowh.github.io/post-images/1696839162336.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1696839240929.png" alt="" loading="lazy"><br>
+重新定义了一个Spatio-Tenporal Sequential Markov game 过程<br>
+<img src="https://steveowh.github.io/post-images/1696839721595.png" alt="" loading="lazy"><br>
+相对于传统的Markov过程增加了一项序列决策的过程。<br>
+在train的过程是可以实现的，因为在central trainer会收集全局的信息，但是在执行的过程中不可行，因为在分散执行的时候agent不知道其他agent的action。<br>
+两种解决方法，一种是train一个参数共享的网络去做其他agent 的action ，另一种是做一个通信模块，将其他agent的aciton mapping到其他的agent。<br>
+但是para shareing会导致次优的结果，并且通信模块在现实实现并不可行。并且会随着agent的规模扩大，算法性能受影响。<br>
+<img src="https://steveowh.github.io/post-images/1696841563792.png" alt="" loading="lazy"><br>
+对于传统的方法左图的方法，对于所有的agent的policy 都需要保存参数，本文提出了一个policy parameters通过训练一个meta model（meta-model是模型的模型，定义的是model 的参数、结构、模型关系的抽象参数）<br>
+<img src="https://steveowh.github.io/post-images/1696842588240.png" alt="" loading="lazy"><br>
+这个图画的不错<br>
+<img src="https://steveowh.github.io/post-images/1696842655911.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1696842803342.png" alt="" loading="lazy"><br>
+<strong>Communication问题</strong><br>
+现在的情况对于agent之间的信息进行broadcast，经常会导致信息冗余。另一种是学习agent之间的Communication网络，但是对于agent数量增加过大之后难以收敛。<br>
+本文的结果是学习到的Communication对于agent数量增加的case仍可以直接使用<br>
+提出的算法是 Transformer-based Email Mechanism（类似于电子邮件转发的机制）<br>
+<img src="https://steveowh.github.io/post-images/1696842982353.png" alt="" loading="lazy"><br>
+传统的工作将agent之间信息进行全部的broadcast，但是受限于现实生活中通信的带宽问题。<br>
+虽然已经有了基于attention from transformer 的工作，但是是通过简单的分组ID去判断是否应该进行通信，在多agent的情况会带来巨大的计算开销，并且agnet数量变化的时候，还需要重新train<br>
+本偏工作agent自己决定跟谁Communication。<br>
+主要解决了4个questions：</p>
+<ol>
+<li>Whether to communicate?</li>
+<li>Whom to communicate with?</li>
+<li>What to communicate?</li>
+<li>How to utilize the messages?<br>
+<img src="https://steveowh.github.io/post-images/1696844572111.png" alt="" loading="lazy"><br>
+OOD问题是agent在一个env中训练以后但是在新的env中出现了traning过程中没有出现过的state，agent难以处理新的state，并且在此种情况下根据train好的policy采取的action 往往会使之前的任务目标失效，造成重大的影响， 本文提出了一种agent自动判别是否陷入OOD问题的困境，并且从中恢复到之前的learned state  distribution的情况。<br>
+两个目标：</li>
+<li>学习如何从OOD中恢复到 learned state distribution</li>
+<li>学习如何restoring performance for the original task<br>
+trian phase：solving the original task<br>
+retrain phase ：returning to the learned state<br>
+本文的工作：</li>
+<li>提出了一个self-supervised RL method to recover from ODD situations</li>
+<li>uncertainty distance to estimate the state and the learned state<br>
+如何评估state的不确定性  通过MCD的方法Monte Carlo dropout</li>
+</ol>
+<p><img src="https://steveowh.github.io/post-images/1696899286065.png" alt="" loading="lazy"><br>
+还是解决的OOD问题，提出了一种根据behavior policy 跟 new policy 差距自动调整reward shifting 的方法。<br>
+<img src="https://steveowh.github.io/post-images/1696900303134.png" alt="" loading="lazy"><br>
+offline RL 的方法是通过any policy 进行data collocation 然后将所有的data 存到buffer中进行learning，learn完成后直接进行部署。<br>
+也有一些对于policy 进行限制的工作，将learned policy和behavior policy距离限制在一个较小的范围内（有点trpo的感觉），然后进行更新。虽然可以一定程度上解决OOD问题，但是会导致update low range，每一步更新步长较小，很难收敛，或者很难达到最优。并且仅仅限制了actor没有限制Critic，很难修正Q网络。尽管也有一些对于Q网络修正的文章。<br>
+本文提出的方法是基于reward shifting 的方法，已有文献证明通过对于<strong>从buffer 中sample的数据添加一个正向的reward</strong>能够一定程度上减少OOD actions问题。<br>
+操，这个文章是对in-distribution+positive reward 对 out-of-distrubution加negative reward，这不是废话吗.......</p>
+<p><img src="https://steveowh.github.io/post-images/1696901898212.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1696901908453.png" alt="" loading="lazy"><br>
+为什么不同的bellman operator不相同，是因为在in-distribution data中，我们已知其中的reward and transition ，但是对于OOD的过程，reward以及transition 都是未知的，Q函数的计算也是通过一个网络来近似的，因此仅仅在网络预测的Q函数中加上了一个negative的 bias进行表示。<br>
+先进行拟合一个行为策略，然后做了评估<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\pi^{new}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight" style="margin-right:0.02691em;">w</span></span></span></span></span></span></span></span></span></span></span></span>和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>π</mi><mi>b</mi></msup></mrow><annotation encoding="application/x-tex">\pi^{b}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">b</span></span></span></span></span></span></span></span></span></span></span></span>之间的距离，通过距离计算<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>b</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">b_{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><br>
+然后进行更新。<br>
+<img src="https://steveowh.github.io/post-images/1696902576164.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1696902852408.png" alt="" loading="lazy"><br>
+本文是考虑的隐私问题。<br>
+question 是在MARL中在保证隐私的情况下（communication 受到限制的情况下，能够保证性能以及收敛性）<br>
+提出的<strong>DPMAC</strong>算法既能够保证自身的隐私，并且又能够满足不同的privacy-levels required。<br>
+如何实现隐私保护。 选用了一种差分隐私的方法，将差分隐私的方法跟multi-agent-communication相结合组成的DPMAC方法，对于每一个agnet有一个local 的sender，每个sender通过DP的方法对于自身的information进行加密。<br>
+加密后的information确实会对central的学习产生重大的影响，可能uhi对学习产生严重的负面影响。<br>
+<strong>学习一个可学习的消息分布，然后从分布中采样进行消息的发送</strong><br>
+作者假设了一个single round binary sums。<br>
+<img src="https://steveowh.github.io/post-images/1696907223192.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1696907290323.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1696906785347.png" alt="" loading="lazy"><br>
+如何对于信息编码，首先确定message的格式问题。对于agent i 接收的message，需要记录的是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mrow><mi mathvariant="normal">（</mi><mi>j</mi><mo>→</mo><mi>i</mi><mi mathvariant="normal">）</mi></mrow></msub></mrow><annotation encoding="application/x-tex">message_{（j→i）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">（</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">→</span><span class="mord mathdefault mtight">i</span><span class="mord cjk_fallback mtight">）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>,  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mrow><mi mathvariant="normal">（</mi><mi>k</mi><mo>→</mo><mi>i</mi><mi mathvariant="normal">）</mi></mrow></msub></mrow><annotation encoding="application/x-tex">message_{（k→i）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">（</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">→</span><span class="mord mathdefault mtight">i</span><span class="mord cjk_fallback mtight">）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mrow><mi mathvariant="normal">（</mi><mi>l</mi><mo>→</mo><mi>i</mi><mi mathvariant="normal">）</mi></mrow></msub></mrow><annotation encoding="application/x-tex">message_{（l→i）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">（</span><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span><span class="mrel mtight">→</span><span class="mord mathdefault mtight">i</span><span class="mord cjk_fallback mtight">）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>,等其他agent传递给<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>g</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">agent_{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的信息，然后将所有的信息通过自身的decoder进行解密，然后和自身的observation进行concatenate，最终送到policy中去进行选择action。<br>
+选择完action后，将自身的action以及observation进行concatenate，然后送到自己的sender(一个encoder)进行加密，加密成不同的message传给其他的agent <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mrow><mi mathvariant="normal">（</mi><mi>i</mi><mo>→</mo><mi>j</mi><mi mathvariant="normal">）</mi></mrow></msub></mrow><annotation encoding="application/x-tex">message_{（i→j）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">（</span><span class="mord mathdefault mtight">i</span><span class="mrel mtight">→</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mord cjk_fallback mtight">）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>,  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mrow><mi mathvariant="normal">（</mi><mi>i</mi><mo>→</mo><mi>k</mi><mi mathvariant="normal">）</mi></mrow></msub></mrow><annotation encoding="application/x-tex">message_{（i→k）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">（</span><span class="mord mathdefault mtight">i</span><span class="mrel mtight">→</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="mord cjk_fallback mtight">）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>s</mi><mi>a</mi><mi>g</mi><msub><mi>e</mi><mrow><mi mathvariant="normal">（</mi><mi>i</mi><mo>→</mo><mi>l</mi><mi mathvariant="normal">）</mi></mrow></msub></mrow><annotation encoding="application/x-tex">message_{（i→l）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">（</span><span class="mord mathdefault mtight">i</span><span class="mrel mtight">→</span><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span><span class="mord cjk_fallback mtight">）</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/marllib/">
+                <h3 class="post-title">
+                  RLlib
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

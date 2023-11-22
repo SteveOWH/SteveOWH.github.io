@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>比例融合的混合储能技术 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>比例融合的混合储能技术</h1>
+            <p class="article-meta">
+              2023-07-19
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p>如果我这个方案可行的话 需要分析哪些指标呢？<br>
+比如说应对不确定性的能力</p>
+<p>一个关键的点：<strong>容量必须考虑峰值生成功率和峰值负荷需求之间的时间长度</strong>，也就是说 峰值生成的功率和峰值输出的功率需要单独的计算。<br>
+<strong>电网对于储能的要求是100MW级别</strong>，<strong>几个小时的储能时长</strong>，<strong>可以运行20年</strong><br>
+<img src="https://steveowh.github.io/post-images/1689748945169.png" alt="" loading="lazy"><br>
+ACA(n)  =0 时，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>R</mi><mrow><mi>i</mi><mi>n</mi><mi>c</mi></mrow></msub><mi mathvariant="normal">是</mi><mi mathvariant="normal">全</mi><mi mathvariant="normal">年</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">储</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">系</mi><mi mathvariant="normal">统</mi><mi mathvariant="normal">套</mi><mi mathvariant="normal">利</mi><mi mathvariant="normal">收</mi><mi mathvariant="normal">益</mi></mrow><annotation encoding="application/x-tex">R_{inc} 是全年的储能系统套利收益</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">是</span><span class="mord cjk_fallback">全</span><span class="mord cjk_fallback">年</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">储</span><span class="mord cjk_fallback">能</span><span class="mord cjk_fallback">系</span><span class="mord cjk_fallback">统</span><span class="mord cjk_fallback">套</span><span class="mord cjk_fallback">利</span><span class="mord cjk_fallback">收</span><span class="mord cjk_fallback">益</span></span></span></span>，此时系统将储能系统的贷款等还完，后面就开始盈利<br>
+<img src="https://steveowh.github.io/post-images/1689756113996.png" alt="" loading="lazy"><br>
+怀疑现在已经达到了节点</p>
+<ol>
+<li>首先出现的问题：电价的数据在np.mean（）后出现了nan 导致计算的时候，<strong>cplex会出现1225错误</strong></li>
+<li>现在的问题是：</li>
+</ol>
+<p><img src="https://steveowh.github.io/post-images/1689904244928.png" alt="" loading="lazy"><br>
+为什么2021 的电价数据是一样的，考虑到后面修改过数据的输入 ，需要重新跑所有的数据</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/kai-ti-bao-gao-si-lu/">
+                <h3 class="post-title">
+                  开题报告思路
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

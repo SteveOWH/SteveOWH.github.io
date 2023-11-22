@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>子刊及以上 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>子刊及以上</h1>
+            <p class="article-meta">
+              2023-08-31
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p>关于线性规划求解的一半都不看了。。。</p>
+<p>模型越精确会更加影响size 等参数</p>
+<p>nature 的文章<br>
+<img src="https://steveowh.github.io/post-images/1694056432768.png" alt="" loading="lazy"></p>
+<p><strong>高分辨率能源系统模型</strong><br>
+<strong>中国十四五能源发展预测</strong><br>
+以及碳价的变化？</p>
+<p>开发了一个优化框架，考虑了安装新光伏发电和风力涡轮的地理空间容量，作为现有的特高压输电的扩展，储能，灵活电力负荷和学习动态。</p>
+<p>最小化平准化电力成本（LOCE）优化每十年光伏和风力发电的位置、容量、建设时间<br>
+<strong>优化的流程</strong></p>
+<figure data-type="image" tabindex="1"><img src="https://steveowh.github.io/post-images/1694071274700.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://steveowh.github.io/post-images/1694071591894.png" alt="" loading="lazy"></figure>
+<p>首先计算每个场景下的可再生能源发电量，确定建设的容量</p>
+<p>然后进行建设时间优化，根据2060年的固定负荷，确定每个地区新建电厂的边际成本</p>
+<p>新能源发电LCOE随着容量变化的趋势<br>
+<img src="https://steveowh.github.io/post-images/1694072197751.png" alt="" loading="lazy"><br>
+评估了预测的新建发电厂与观测到的发电厂容量error 以及建设地区error<br>
+现有的发电厂数据来源<strong>OpenStreetMap</strong><br>
+<img src="https://steveowh.github.io/post-images/1694072340925.png" alt="" loading="lazy"><br>
+考虑到可再生能源发电的信息与用电负荷需求的不匹配性，假设通过需求侧响应调整负荷到白天，以匹配新能源的发电曲线。<br>
+<img src="https://steveowh.github.io/post-images/1694072457011.png" alt="" loading="lazy"><br>
+建模时考虑了温度，遮挡、以及光伏倾角对于发电量的影响，消融实验如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1694072748820.png" alt="" loading="lazy"><br>
+通过建设输电线路以及储能系统，能够有效的提升系统的电效率<br>
+<img src="https://steveowh.github.io/post-images/1694072585120.png" alt="" loading="lazy"><br>
+对比了电气化对于系统效率的影响，以及其他可再生能源发电量增加对于系统效率的影响<br>
+<img src="https://steveowh.github.io/post-images/1694072965710.png" alt="" loading="lazy"><br>
+为什么会有建设时间这个变量，因为有他所谓的learning rate 存在，在每年的建设成本都不一样<br>
+优化后的建设成本如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1694073554310.png" alt="" loading="lazy"><br>
+选取了几种不同的场景进行对比<br>
+CASE A 限制新建电厂的功率为10-100GW<br>
+case b  考虑新建特高压输电线路<br>
+case c 增加储能<br>
+case d 增加电气化<br>
+case e 考虑灵活负荷<br>
+<img src="https://steveowh.github.io/post-images/1694073794403.png" alt="" loading="lazy"></p>
+<p>评估了在不同条件下对于CO2减排成本的分析<br>
+<img src="https://steveowh.github.io/post-images/1694073931759.png" alt="" loading="lazy"><br>
+评估了从CASE A  - CASE E对于减排能力的提升<br>
+<img src="https://steveowh.github.io/post-images/1694074356486.png" alt="" loading="lazy"><br>
+敏感性分析<br>
+<img src="https://steveowh.github.io/post-images/1694074805777.png" alt="" loading="lazy"><br>
+成本分布<br>
+<img src="https://steveowh.github.io/post-images/1694074780795.png" alt="" loading="lazy"><br>
+评估了Op情况下与CFED路线对于CCS的需求对比，新能源占比逐年提升<br>
+<img src="https://steveowh.github.io/post-images/1694075009042.png" alt="" loading="lazy"><br>
+LCOE模型<br>
+<img src="https://steveowh.github.io/post-images/1694075852149.png" alt="" loading="lazy"></p>
+<p>代码部分<br>
+以优化每个县最大面积光伏电站的类型和空间分布。<br>
+中国地图网格化，计算每个网格的地理位置面积，共有4800，1950个面积<br>
+<img src="https://steveowh.github.io/post-images/1694140856470.png" alt="" loading="lazy"><br>
+SR_12TO18是地理信息划分，以及其他信息的加载<br>
+<img src="https://steveowh.github.io/post-images/1694141188277.png" alt="" loading="lazy"><br>
+对于15种类的土地信息，每个进行分类，每类有对应的PV\ONSHORE WIND\OFFSHORE WIND信息</p>
+<figure data-type="image" tabindex="3"><img src="https://steveowh.github.io/post-images/1694141352994.png" alt="" loading="lazy"></figure>
+<p>确定可行的土地：非自然保护区，温度大于0，倾角小于5 光照强度大于4 同时地形应该是属于6 7 8 9 10 15 16 ** table 3 中有PV的地区**<br>
+<img src="https://steveowh.github.io/post-images/1694141871358.png" alt="" loading="lazy"></p>
+<p><img src="https://steveowh.github.io/post-images/1694141972017.png" alt="" loading="lazy"><br>
+xnet是所属的行号<br>
+ynet是所属的列好<br>
+<strong>matlab索引时候先出列再出行</strong><br>
+a是一个1-1800<br>
+b是111111<br>
+逻辑清楚 但是不清楚做的是社么</p>
+<p><img src="https://steveowh.github.io/post-images/1694143912083.png" alt="" loading="lazy"><br>
+2373是县级的数量<br>
+idx是county_cN适合的地方 indx2 是所有的县对应的地方，如果没有合适的地方，发电量设置为0<br>
+<img src="https://steveowh.github.io/post-images/1694144138576.png" alt="" loading="lazy"></p>
+<p>如何评估可再生能源预测的精确程度，做了一个benchmark<br>
+<img src="https://steveowh.github.io/post-images/1694652174950.png" alt="" loading="lazy"><br>
+为什么需要一个新能源发电预测误差的benchmark</p>
+<ol>
+<li>误差预测需要有一个基准</li>
+<li>电力系统优化等等优化需要基于不确定性下的鲁棒优化</li>
+<li>预测误差会影响电力公司对于可再生能源的投资</li>
+</ol>
+<p><img src="https://steveowh.github.io/post-images/1700441063894.png" alt="" loading="lazy"><br>
+自己自足的系统可以作为一种减少传输成本的方法。<br>
+<img src="https://steveowh.github.io/post-images/1700444287966.png" alt="" loading="lazy"><br>
+通过制作代理模型，然后生成足够多的single-family-building进行计算。<br>
+如上图c所示，作者选用了光伏+风电的发电侧配置，因为此发电技术存在发电时间互补性。<br>
+并且在考虑热等应用的时候，系统的电力成本在高能源自给率的时候达到最优，为70%以上。<br>
+<img src="https://steveowh.github.io/post-images/1700445144754.png" alt="" loading="lazy"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>m</mi><mi>p</mi><mi>o</mi><mi>r</mi><msub><mi>t</mi><mi>p</mi></msub></mrow><annotation encoding="application/x-tex">import_{p}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9456279999999999em;vertical-align:-0.286108em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">p</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 是在电价为p的时候购买的电量</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/pvwtbtht-ji-zhu-jing-ji-xing-fen-xi-wen-zhang/">
+                <h3 class="post-title">
+                  PV/WT+BT+HT技术经济性分析文章
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

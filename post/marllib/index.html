@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>RLlib | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>RLlib</h1>
+            <p class="article-meta">
+              2023-09-13
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p>MARL的训练流程:<br>
+<img src="https://steveowh.github.io/post-images/1694590191740.png" alt="" loading="lazy"></p>
+<p>首先是make ENV :</p>
+<figure data-type="image" tabindex="1"><img src="https://steveowh.github.io/post-images/1694595117230.png" alt="" loading="lazy"></figure>
+<p>framework<br>
+为什么选用marllib，单智能体+数据通信  =marllib</p>
+<p><img src="https://steveowh.github.io/post-images/1694654051187.png" alt="" loading="lazy"><br>
+首先是pre-learning过程，相当于验证工作流程的准确性？看看整体是否能够运行<br>
+<img src="https://steveowh.github.io/post-images/1694654295552.png" alt="" loading="lazy"><br>
+如果算法能有有效的运行，则进入了真正的训练阶段，真正的训练阶段基本上和单智能体的方法一样，但是例如Q 分解等等的方法需要得到其他agent 的数据，因此多家了通讯的功能，是基于ray做的。<br>
+对于agent的数据收集，对于不同的算法有不同的要求。比如说off-poliy是基于buffer的收集，on-policy是基于concat batch的方式。<br>
+<img src="https://steveowh.github.io/post-images/1694654562984.png" alt="" loading="lazy"><br>
+对于算法方面，marllib将算法分为了三大类，其中</p>
+<ol>
+<li>第一类为independetn learning</li>
+<li>第二类是中央critic的方法</li>
+<li>第三类是值分解的方法<br>
+第一类single 的方法相近，即在同一个环境中create多个agent，每个agnet与环境进行通信，agent之间不做交流，此种方法导致在env是一个动态变化的过程，因为每个agent与env交互后，env都会进行变化，虽然理论上不可信，但是在工程中表现较好。<br>
+第二类中，中心的critic需要收集每个actor的数据以及每个actor的observation数据，以训练中央的ciritc。然后中央的critic 将参数传下去，去指导每个actor网络的更新。<br>
+第三类中，中央的Q值由每个actor各自的Q值计算，因此中央需要收集每个agent的Q值以及observation，action 构成fully observation 以及joint action 以用来预测 Q_tot<br>
+<img src="https://steveowh.github.io/post-images/1694654760921.png" alt="" loading="lazy"></li>
+</ol>
+<p>对于中央critic 的方案，为了保证异步运行，需要收集其他agent 的信息<br>
+<img src="https://steveowh.github.io/post-images/1694655235572.png" alt="" loading="lazy"><br>
+对于buffer类的<br>
+<img src="https://steveowh.github.io/post-images/1694655277063.png" alt="" loading="lazy"><br>
+policy map用于分发不同agent 的policy 以及查询信息传递。</p>
+<p><strong>value decompose（值分解类的算法）</strong></p>
+<p>网络架构如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1694607229106.png" alt="" loading="lazy"><br>
+对于Q值分解的算法，存在着obversetion与state的区别<br>
+为什么计算  Q的时候还会需要next observation，DRQN的意义，在局部观测中通过上下文信息能够好的处理不完全状态下的信息。<br>
+其中的T是指的是几个T 的observation组合成一个新的observation<br>
+传统的DQN算法没有T 的概念，直接就是当前状态的state 与next state<br>
+对于多智能体的任务，DRQN的引入 所以同时引入了T 的概念，<br>
+但是为什么只取了observation的第一个，取next observation的全部？？存在疑问？？需要消融试验一下。<br>
+<img src="https://steveowh.github.io/post-images/1694609817514.png" alt="" loading="lazy"><br>
+维度设置<br>
+[b,t,n,obs_size]<br>
+如何计算对应observation的Q 值：<br>
+<img src="https://steveowh.github.io/post-images/1694610277644.png" alt="" loading="lazy"><br>
+首先将所有的observation转换成字典格式，然后，将observation转换成一个batchsize的格式<br>
+如何转换成一个batchsize的格式：<br>
+首先对于输入的tensor T， [batch_size ,n_agent,obs_dim]<br>
+首先先读取tensor的shape 然后转换成list 然后再进行拼接，主要是将batch size 与n agent 维度合并<br>
+<img src="https://steveowh.github.io/post-images/1694610386747.png" alt="" loading="lazy"><br>
+计算的流程还是基于dqn的那些工作来的，计算q 计算q_target 然后计算loss</p>
+<p><img src="https://steveowh.github.io/post-images/1695019388352.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1695019403452.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1695019426860.png" alt="" loading="lazy"><br>
+environment：需要满足对应的gym接口<br>
+preprocessor：对输入的obs进行处理<br>
+filter：归一化单元、mask<br>
+model：policy模块以及evaluate模块<br>
+action_distribution:policy类输出的action 分布，对于离散型变量是softmax之前的变量</p>
+<p>policy 相关的定义：<br>
+定义一个policy 需要定义四个参数：<br>
+policy_class:<br>
+observation_space:<br>
+action_space:<br>
+config:<br>
+<img src="https://steveowh.github.io/post-images/1695019753140.png" alt="" loading="lazy"><br>
+policy 主要是计算通过sample的batch information 然后计算action 以及计算loss 然后更新梯度信息，apply_gradients  set_weights 设置新的weights</p>
+<p>modelV2是torch 下的创建网络的信息，主要是network相关的信息。<br>
+model相关的信息主要由obs_space,action_space,model_config 等相关的信息定义，主要是包括net的输入输出以及相关的信息定义，例如使用MLP RNN LSTM等等<br>
+<img src="https://steveowh.github.io/post-images/1695021235119.png" alt="" loading="lazy"><br>
+torch modelV2 主要是继承的modelV2 的类<br>
+model V2 主要定义如下，需要定义<br>
+obs_space,<br>
+action_space,<br>
+num_outputs  ,<br>
+model_config,<br>
+name,<br>
+framework</p>
+<figure data-type="image" tabindex="2"><img src="https://steveowh.github.io/post-images/1695021417602.png" alt="" loading="lazy"></figure>
+<p>Rolloutworker<br>
+collect experiences from envirnment<br>
+对于single agent 类，只需要定义policy 以及env 就可以进行sample 得到的结果是一个sampleBatchsize<br>
+<img src="https://steveowh.github.io/post-images/1695021841876.png" alt="" loading="lazy"></p>
+<p>对于maagent的情况，需要定义agent的数量以及policy的数量，同时还需要定义policy -agent的mapping 以方便对于不同的agent分配不同的policy 然后得到的是一个multiagentbatchsize<br>
+不同策略对应得到的batchsize<br>
+<img src="https://steveowh.github.io/post-images/1695021930470.png" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="3"><img src="https://steveowh.github.io/post-images/1695195702122.png" alt="" loading="lazy"></figure>
+<p><strong>RLlib 中DQN算法的实现策略</strong></p>
+<ol>
+<li>参数定义： default_config = {}</li>
+<li>检查参数定义是否错误</li>
+<li>确定分布式数据流的传输方式。</li>
+<li>创建的是localreplaybuffer，相当于每个线程自己的buffer</li>
+<li>创建并行迭代器</li>
+</ol>
+<p><strong>framework</strong></p>
+<ol>
+<li>config 模块<br>
+首先定义algorithm config 模块， config 是一个dict类，</li>
+</ol>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/yu-dian-li-xi-tong-jie-he/">
+                <h3 class="post-title">
+                  与电力系统结合
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

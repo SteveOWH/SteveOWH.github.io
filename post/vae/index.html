@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>VAE | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>VAE</h1>
+            <p class="article-meta">
+              2023-08-23
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://steveowh.github.io/post-images/1692794580666.png" alt="" loading="lazy"><br>
+从自编码器到VAE，自编码器通过一个encoder 编码信息，一个decoder还原信息。如图所示，中间的Bottleneck网络可以压缩输入信息维度。<br>
+loss 是输入encoder 的x 与deconder输出<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>x</mi><mo separator="true">,</mo></msup></mrow><annotation encoding="application/x-tex">x^{,}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43689199999999995em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.43689199999999995em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mpunct mtight">,</span></span></span></span></span></span></span></span></span></span></span></span>的差值。<br>
+<img src="https://steveowh.github.io/post-images/1692794776006.png" alt="" loading="lazy"></p>
+<p><strong>如何解决autoencoder的 overfitting 问题？</strong></p>
+<ol>
+<li>
+<p>Denoising Autoencoder<br>
+<img src="https://steveowh.github.io/post-images/1692794919369.png" alt="" loading="lazy"><br>
+在输入中随机加入一些噪声，然后作为encoder的输入，但是decoder的输出还原的是加入噪声之前的输入，结果如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1692794990506.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>Sparse Autoencoder<br>
+选择性的激活hidden unit 中的神经元，强制的将某一层的神经元激活总量设置为一个较小的值。<br>
+<img src="https://steveowh.github.io/post-images/1692795335552.png" alt="" loading="lazy"><br>
+通过对之前的loss 添加一个<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">B</mi></mrow><annotation encoding="application/x-tex">\Beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathrm">B</span></span></span></span></span>*kl散度的惩罚项<br>
+<img src="https://steveowh.github.io/post-images/1692795392153.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1692795448536.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>k-sparse atuoencoder<br>
+对bottleneck layer中的k个使用最高的activations进行激活，其他的参数设置为0</p>
+</li>
+<li>
+<p>Contractive autoencoder<br>
+<img src="https://steveowh.github.io/post-images/1692795670216.png" alt="" loading="lazy"><br>
+在loss中添加一项 以惩罚对于过于敏感的输入的影响</p>
+</li>
+</ol>
+<p><strong>VAE</strong><br>
+<strong>VAE</strong>与其他的自编码器相似，但是是基于变分贝叶斯与图模型。<br>
+VAE并不是将输入的x向量转换成一个固定vector，引入了概率的思想，是将他建模为一个概率分布<br>
+<img src="https://steveowh.github.io/post-images/1692795910067.png" alt="" loading="lazy"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span></span></span></span>是概率分布的参数，z是vae生成的非fixed的编码向量，x是初始的输入<br>
+<strong>如何生成一个类x的样本呢？</strong><br>
+假设已知<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span></span></span></span>，先从P中采样一个z，然后计算使用encoder deconder 将z转换成x的概率<br>
+最优的参数<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span></span></span></span>是最大化生成原始样本x的概率（最大似然估计）<br>
+<img src="https://steveowh.github.io/post-images/1692796202319.png" alt="" loading="lazy"><br>
+转换成log形式<br>
+<img src="https://steveowh.github.io/post-images/1692796224232.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1692796262508.png" alt="" loading="lazy"><br>
+因为是连续变量积分，计算量较大，因此使用一个函数近似代替连续的部分<br>
+<img src="https://steveowh.github.io/post-images/1692796370997.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1692796453377.png" alt="" loading="lazy"><br>
+其中z——》x部分的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>P</mi><mi>θ</mi></msub><mo>(</mo><mi>X</mi><mi mathvariant="normal">∣</mi><mi>Z</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">P_{\theta}(X|Z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">∣</span><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="mclose">)</span></span></span></span>叫做probabilistic encoder<br>
+<img src="https://steveowh.github.io/post-images/1692796759161.png" alt="" loading="lazy"></p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/bian-cheng-ji-qiao/">
+                <h3 class="post-title">
+                  编程技巧
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

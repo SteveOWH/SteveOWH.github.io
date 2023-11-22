@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>SteveRL库测试及更新日志 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>SteveRL库测试及更新日志</h1>
+            <p class="article-meta">
+              2023-06-28
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h1 id="ppo算法测试日志">PPO算法测试日志</h1>
+<h1 id="agent_base-与agent_ppo-相互引用问题">Agent_base 与Agent_ppo 相互引用问题：</h1>
+<figure data-type="image" tabindex="1"><img src="https://steveowh.github.io/post-images/1687957252354.png" alt="" loading="lazy"></figure>
+<h1 id="env-test">env test</h1>
+<p>在此步骤之前<code>state = env.step(action)</code>，action需要转换成numpy类型，一半网络的输出处现需要加一个输出限制</p>
+<p>#各个参数的标准化，单维度的数据需要降到最低维度<br>
+logprob 、 entropy这种需要降到最低的维度，1dims<br>
+state action 这种运算完以后需要讲到最低的维度  【state_dim】,【action_dim】</p>
+<p>buffer 存的时候要不要存入tensor   -&gt;  现在确定 存入buffer的部分都是tensor</p>
+<p>如何组合hidden<br>
+假如list 中的包含多维的tensor ，不能直接将tensor转换成list<br>
+<code>val= torch.tensor([item.cpu().detach().numpy() for item in val]).cuda()</code></p>
+<h1 id="关于lstm的问题">关于LSTM的问题</h1>
+<p>先拿标准环境练手  然后再搞他这个环境。一步一步来吧，多花点时间。</p>
+<h1 id="关于logprobs的问题">关于logprobs的问题</h1>
+<p>由于在lstm中的x需要扩充维度到（seq_size ,batch_size,input_size）,然后送入输出的action也是一个高维的 此时计算action_avg时一定要先将action降到（1，action_dim）然后再计算action_avg，最后得到的 batch_size的action logprob 应该为 ：<br>
+<img src="https://steveowh.github.io/post-images/1688608475085.png" alt="" loading="lazy"><br>
+#几个注意事项<br>
+1.计算时一定要保证tensor的维度相同 ，这也是最长出错的 也是最难搞定的，最好是设计时先规定好各自的tensor dim，<br>
+2.计算时，参与计算的tensor需要在同个device上 ，同在cuda 或者同在gpu上<br>
+3.在做这种开源的自己写的B环境时，一定要先在gym环境中验证了算法的有效性 ，然后在到开源的环境中测试，如果代码调参不好，应该是环境的问题  出问题 不一定是i算法的问题，还有可能他写的b环境就有问题。<br>
+4.对于值类的网络输出，应该强制的转换为（batch_size,1）维度。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/deepbid-wen-zhang-fu-xian/">
+                <h3 class="post-title">
+                  DeepBid 文章复现
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

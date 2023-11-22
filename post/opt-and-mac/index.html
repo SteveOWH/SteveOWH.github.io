@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>OPT &amp; MAC | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>OPT &amp; MAC</h1>
+            <p class="article-meta">
+              2023-11-20
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <h1 id="power_use_efficiency_and_storage">power_use_efficiency_and_storage</h1>
+<p><img src="https://steveowh.github.io/post-images/1700614575271.png" alt="" loading="lazy"><br>
+首先将三种中type 的powerunit拼起来，然后对lcoe进行排序。</p>
+<p>选取288个小时作为全年的典型日负荷、发电；每个季节为96个小时（4天）。<br>
+<img src="https://steveowh.github.io/post-images/1700614679829.png" alt="" loading="lazy"><br>
+对于负荷的计算，是根据regions 进行计算的，然后ragions并不是根据34个分的而是对34个进行整合，按照区域进行划分，类似于如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1700614874577.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1700614880718.png" alt="" loading="lazy"><br>
+产电量是根据累加计算的，powergenerate_monhour_cn是一个288*1的矩阵，因此计算单个电厂的效率的时候需要powergenerate_monhour_cn（i+1）   - powergenerate_monhour_cn（i）<br>
+然后计算每个电厂在不同情况下的发电量，然后效率的计算公式是<br>
+sum(powergenerate_monhour_CN2_2060-aa)./sum(powergenerate_monhour_CN-bb)<br>
+aa = powergenerate_monhour_cn2_2060（i）<br>
+bb = powergenerate_monhour_CN(i)<br>
+作者选取了4种case进行计算。3种情况</p>
+<p><strong>累计至i-1电厂产电小于用电负荷 （zz，regions）&amp; 产电小于负荷（cn）&amp;产电小于负荷（sum）</strong><br>
+<strong>Intra-region consumption</strong><br>
+<img src="https://steveowh.github.io/post-images/1700615293072.png" alt="" loading="lazy"><br>
+<code>powergenerate_monhour_reg2_2060(zz,reg) = powergenerate_monhour_reg(zz,reg)*0.967;</code><br>
+消耗 = 发电<br>
+<strong>considering transportation</strong><br>
+<code>powergenerate_monhour_reg2_2060_trans(zz,reg) = powergenerate_monhour_reg(zz,reg)*0.967</code><br>
+消耗= 发电<br>
+<strong>considering transportation and storage</strong><br>
+<code>powergenerate_monhour_reg2_2060_trans_storage(zz,reg) = powergenerate_monhour_reg(zz,reg)*0.967</code><br>
+消耗= 发电</p>
+<!-- more -->
+<p><strong>累计至i-1电厂产电大于用电负荷（zz，reg）&amp; 产电小于负荷（cn）&amp;产电小于负荷（sum）</strong><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi mathvariant="normal">此</mi><mi mathvariant="normal">种</mi><mi mathvariant="normal">情</mi><mi mathvariant="normal">况</mi><mi mathvariant="normal">仅</mi><mi mathvariant="normal">仅</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">要</mi><mi mathvariant="normal">考</mi><mi mathvariant="normal">虑</mi><mi mathvariant="normal">传</mi><mi mathvariant="normal">输</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{此种情况仅仅需要考虑传输}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord" style="color:red;"><span class="mord cjk_fallback" style="color:red;">此</span><span class="mord cjk_fallback" style="color:red;">种</span><span class="mord cjk_fallback" style="color:red;">情</span><span class="mord cjk_fallback" style="color:red;">况</span><span class="mord cjk_fallback" style="color:red;">仅</span><span class="mord cjk_fallback" style="color:red;">仅</span><span class="mord cjk_fallback" style="color:red;">需</span><span class="mord cjk_fallback" style="color:red;">要</span><span class="mord cjk_fallback" style="color:red;">考</span><span class="mord cjk_fallback" style="color:red;">虑</span><span class="mord cjk_fallback" style="color:red;">传</span><span class="mord cjk_fallback" style="color:red;">输</span></span></span></span></span><br>
+<img src="https://steveowh.github.io/post-images/1700615779675.png" alt="" loading="lazy"><br>
+<strong>Intra-region consumption</strong><br>
+<code>powergenerate_monhour_reg2_2060(zz,reg) = powerdemand_monhour_reg(zz,reg)</code><br>
+消耗= 用电<br>
+<strong>considering transportation</strong><br>
+<code>powergenerate_monhour_reg2_2060_trans(zz,reg) = powerdemand_monhour_reg(zz,reg)+(powergenerate_monhour_reg(zz,reg)*0.967-powerdemand_monhour_reg(zz,reg))*0.983</code><br>
+消耗= 用电 + （产电-用电）*trans<br>
+<strong>considering transportation and storage</strong><br>
+<code>powergenerate_monhour_reg2_2060_trans_storage(zz,reg) = powerdemand_monhour_reg(zz,reg)+(powergenerate_monhour_reg(zz,reg)*0.967-powerdemand_monhour_reg(zz,reg))*0.983</code><br>
+消耗= 用电 + （产电-用电）*trans</p>
+<p>** 累计至i-1电厂产电大于负荷（zz,reg）&amp;产电小于负荷（sum）**<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi mathvariant="normal">需</mi><mi mathvariant="normal">要</mi><mi mathvariant="normal">考</mi><mi mathvariant="normal">虑</mi><mi mathvariant="normal">储</mi><mi mathvariant="normal">能</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{需要考虑储能}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord" style="color:red;"><span class="mord cjk_fallback" style="color:red;">需</span><span class="mord cjk_fallback" style="color:red;">要</span><span class="mord cjk_fallback" style="color:red;">考</span><span class="mord cjk_fallback" style="color:red;">虑</span><span class="mord cjk_fallback" style="color:red;">储</span><span class="mord cjk_fallback" style="color:red;">能</span></span></span></span></span><br>
+<strong>Intra-region consumption</strong><br>
+<code>powergenerate_monhour_reg2_2060(zz,reg) = aaaa_reg(zz,reg)</code><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="green"><mrow><mi mathvariant="normal">因</mi><mi mathvariant="normal">为</mi><mi mathvariant="normal">累</mi><mi mathvariant="normal">计</mi><mi mathvariant="normal">到</mi><mi>i</mi><mo>−</mo><mn>1</mn><mi mathvariant="normal">电</mi><mi mathvariant="normal">厂</mi><mi mathvariant="normal">已</mi><mi mathvariant="normal">经</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">够</mi><mi mathvariant="normal">满</mi><mi mathvariant="normal">足</mi><mi mathvariant="normal">所</mi><mi mathvariant="normal">有</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">量</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">求</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{green}{因为累计到i-1电厂已经能够满足所有的能量需求}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord" style="color:green;"><span class="mord cjk_fallback" style="color:green;">因</span><span class="mord cjk_fallback" style="color:green;">为</span><span class="mord cjk_fallback" style="color:green;">累</span><span class="mord cjk_fallback" style="color:green;">计</span><span class="mord cjk_fallback" style="color:green;">到</span><span class="mord mathdefault" style="color:green;">i</span><span class="mspace" style="color:green;margin-right:0.2222222222222222em;"></span><span class="mbin" style="color:green;">−</span><span class="mspace" style="color:green;margin-right:0.2222222222222222em;"></span><span class="mord" style="color:green;">1</span><span class="mord cjk_fallback" style="color:green;">电</span><span class="mord cjk_fallback" style="color:green;">厂</span><span class="mord cjk_fallback" style="color:green;">已</span><span class="mord cjk_fallback" style="color:green;">经</span><span class="mord cjk_fallback" style="color:green;">能</span><span class="mord cjk_fallback" style="color:green;">够</span><span class="mord cjk_fallback" style="color:green;">满</span><span class="mord cjk_fallback" style="color:green;">足</span><span class="mord cjk_fallback" style="color:green;">所</span><span class="mord cjk_fallback" style="color:green;">有</span><span class="mord cjk_fallback" style="color:green;">的</span><span class="mord cjk_fallback" style="color:green;">能</span><span class="mord cjk_fallback" style="color:green;">量</span><span class="mord cjk_fallback" style="color:green;">需</span><span class="mord cjk_fallback" style="color:green;">求</span></span></span></span></span><br>
+<strong>considering transportation</strong><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="green"><mrow><mi mathvariant="normal">因</mi><mi mathvariant="normal">为</mi><mi mathvariant="normal">累</mi><mi mathvariant="normal">计</mi><mi mathvariant="normal">到</mi><mi>i</mi><mo>−</mo><mn>1</mn><mi mathvariant="normal">电</mi><mi mathvariant="normal">厂</mi><mi mathvariant="normal">已</mi><mi mathvariant="normal">经</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">够</mi><mi mathvariant="normal">满</mi><mi mathvariant="normal">足</mi><mi mathvariant="normal">所</mi><mi mathvariant="normal">有</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">量</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">求</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{green}{因为累计到i-1电厂已经能够满足所有的能量需求}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord" style="color:green;"><span class="mord cjk_fallback" style="color:green;">因</span><span class="mord cjk_fallback" style="color:green;">为</span><span class="mord cjk_fallback" style="color:green;">累</span><span class="mord cjk_fallback" style="color:green;">计</span><span class="mord cjk_fallback" style="color:green;">到</span><span class="mord mathdefault" style="color:green;">i</span><span class="mspace" style="color:green;margin-right:0.2222222222222222em;"></span><span class="mbin" style="color:green;">−</span><span class="mspace" style="color:green;margin-right:0.2222222222222222em;"></span><span class="mord" style="color:green;">1</span><span class="mord cjk_fallback" style="color:green;">电</span><span class="mord cjk_fallback" style="color:green;">厂</span><span class="mord cjk_fallback" style="color:green;">已</span><span class="mord cjk_fallback" style="color:green;">经</span><span class="mord cjk_fallback" style="color:green;">能</span><span class="mord cjk_fallback" style="color:green;">够</span><span class="mord cjk_fallback" style="color:green;">满</span><span class="mord cjk_fallback" style="color:green;">足</span><span class="mord cjk_fallback" style="color:green;">所</span><span class="mord cjk_fallback" style="color:green;">有</span><span class="mord cjk_fallback" style="color:green;">的</span><span class="mord cjk_fallback" style="color:green;">能</span><span class="mord cjk_fallback" style="color:green;">量</span><span class="mord cjk_fallback" style="color:green;">需</span><span class="mord cjk_fallback" style="color:green;">求</span></span></span></span></span><br>
+<code>powergenerate_monhour_CN2_2060_trans(zz,1) = powerdemand_monhour_CN2060(zz,1</code><br>
+<strong>considering transportation and storage</strong><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="green"><mrow><mi mathvariant="normal">因</mi><mi mathvariant="normal">为</mi><mi mathvariant="normal">累</mi><mi mathvariant="normal">计</mi><mi mathvariant="normal">到</mi><mi>i</mi><mo>−</mo><mn>1</mn><mi mathvariant="normal">电</mi><mi mathvariant="normal">厂</mi><mi mathvariant="normal">已</mi><mi mathvariant="normal">经</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">够</mi><mi mathvariant="normal">满</mi><mi mathvariant="normal">足</mi><mi mathvariant="normal">所</mi><mi mathvariant="normal">有</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">能</mi><mi mathvariant="normal">量</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">求</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{green}{因为累计到i-1电厂已经能够满足所有的能量需求}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.74285em;vertical-align:-0.08333em;"></span><span class="mord" style="color:green;"><span class="mord cjk_fallback" style="color:green;">因</span><span class="mord cjk_fallback" style="color:green;">为</span><span class="mord cjk_fallback" style="color:green;">累</span><span class="mord cjk_fallback" style="color:green;">计</span><span class="mord cjk_fallback" style="color:green;">到</span><span class="mord mathdefault" style="color:green;">i</span><span class="mspace" style="color:green;margin-right:0.2222222222222222em;"></span><span class="mbin" style="color:green;">−</span><span class="mspace" style="color:green;margin-right:0.2222222222222222em;"></span><span class="mord" style="color:green;">1</span><span class="mord cjk_fallback" style="color:green;">电</span><span class="mord cjk_fallback" style="color:green;">厂</span><span class="mord cjk_fallback" style="color:green;">已</span><span class="mord cjk_fallback" style="color:green;">经</span><span class="mord cjk_fallback" style="color:green;">能</span><span class="mord cjk_fallback" style="color:green;">够</span><span class="mord cjk_fallback" style="color:green;">满</span><span class="mord cjk_fallback" style="color:green;">足</span><span class="mord cjk_fallback" style="color:green;">所</span><span class="mord cjk_fallback" style="color:green;">有</span><span class="mord cjk_fallback" style="color:green;">的</span><span class="mord cjk_fallback" style="color:green;">能</span><span class="mord cjk_fallback" style="color:green;">量</span><span class="mord cjk_fallback" style="color:green;">需</span><span class="mord cjk_fallback" style="color:green;">求</span></span></span></span></span><br>
+<code>powergenerate_monhour_CN2_2060_trans_storage(zz,1) =  aaaa_trans_storage(zz,1)+0.99*0.85*0.983*0.967*(powergenerat_monhour(zz,i))</code><br>
+<code>storage(zz,i) = storage_aaa(zz,i-1)+0.99*0.85*0.983*0.967*(powergenerat_monhour(zz,i))</code><br>
+<strong>累计至i-1电厂产电大于负荷（sum）&amp;产电大于负荷（sum）</strong><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi mathvariant="normal">需</mi><mi mathvariant="normal">要</mi><mi mathvariant="normal">考</mi><mi mathvariant="normal">虑</mi><mi mathvariant="normal">储</mi><mi mathvariant="normal">能</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{需要考虑储能}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord" style="color:red;"><span class="mord cjk_fallback" style="color:red;">需</span><span class="mord cjk_fallback" style="color:red;">要</span><span class="mord cjk_fallback" style="color:red;">考</span><span class="mord cjk_fallback" style="color:red;">虑</span><span class="mord cjk_fallback" style="color:red;">储</span><span class="mord cjk_fallback" style="color:red;">能</span></span></span></span></span><br>
+<strong>Intra-region consumption</strong><br>
+<code>powergenerate_monhour_reg2_2060(zz,reg) = aaaa_reg(zz,reg)</code><br>
+<strong>considering transportation</strong><br>
+<code>powergenerate_monhour_CN2_2060_trans(zz,1) = powerdemand_monhour_CN2060(zz,1)</code><br>
+<strong>considering transportation and storage</strong><br>
+<code>powergenerate_monhour_CN2_2060_trans_storage(zz,1) = aaaa_trans_storage(zz,1)+0.99*0.85*0.983*0.967*(powergenerat_monhour(zz,i))</code></p>
+<h1 id="trans_capacity_and_cost">trans_capacity_and_cost</h1>
+<p>首先计算不同的trans的fix成本？<br>
+根据tans的类别，指定不同列别的成本信息<br>
+<img src="https://steveowh.github.io/post-images/1700620266220.png" alt="" loading="lazy"></p>
+<p><strong>计算产电量相关的信息</strong><br>
+通用需要针对不同的type制订相关的发电量<br>
+<img src="https://steveowh.github.io/post-images/1700621058406.png" alt="" loading="lazy"><br>
+然后按照不同的电厂建设type  =[1,2,2,4,4]进行powercy分解<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi mathvariant="normal">假</mi><mi mathvariant="normal">设</mi><mi>p</mi><mi>o</mi><mi>w</mi><mi>e</mi><mi>r</mi><mo>&gt;</mo><mi>p</mi><mi>r</mi><mi>o</mi><mi>d</mi><mi>u</mi><mi>c</mi><mi>e</mi><mi>d</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{假设power &gt; produced}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord" style="color:red;"><span class="mord cjk_fallback" style="color:red;">假</span><span class="mord cjk_fallback" style="color:red;">设</span><span class="mord mathdefault" style="color:red;">p</span><span class="mord mathdefault" style="color:red;">o</span><span class="mord mathdefault" style="margin-right:0.02691em;color:red;">w</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mspace" style="color:red;margin-right:0.2777777777777778em;"></span><span class="mrel" style="color:red;">&gt;</span><span class="mspace" style="color:red;margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="color:red;">p</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mord mathdefault" style="color:red;">o</span><span class="mord mathdefault" style="color:red;">d</span><span class="mord mathdefault" style="color:red;">u</span><span class="mord mathdefault" style="color:red;">c</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="color:red;">d</span></span></span></span></span><br>
+所有的power都由transmission 提供</p>
+<ol>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi mathvariant="normal">如</mi><mi mathvariant="normal">果</mi><mi mathvariant="normal">产</mi><mi mathvariant="normal">电</mi><mi mathvariant="normal">量</mi><mo>&lt;</mo><mi>p</mi><mi>o</mi><mi>w</mi><mi>e</mi><mi>r</mi><mi>c</mi><mi>y</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{如果产电量&lt;powercy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mord" style="color:red;"><span class="mord cjk_fallback" style="color:red;">如</span><span class="mord cjk_fallback" style="color:red;">果</span><span class="mord cjk_fallback" style="color:red;">产</span><span class="mord cjk_fallback" style="color:red;">电</span><span class="mord cjk_fallback" style="color:red;">量</span><span class="mspace" style="color:red;margin-right:0.2777777777777778em;"></span><span class="mrel" style="color:red;">&lt;</span><span class="mspace" style="color:red;margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="color:red;">p</span><span class="mord mathdefault" style="color:red;">o</span><span class="mord mathdefault" style="margin-right:0.02691em;color:red;">w</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mord mathdefault" style="color:red;">c</span><span class="mord mathdefault" style="margin-right:0.03588em;color:red;">y</span></span></span></span></span><br>
+<code>e0(reg,3)=e0(reg,3)+optpowerunit_IX(i2,1)</code>按照conty 累加power<br>
+<code>e0(reg,4)=e0(reg,4)+optpowerunit_IX(i2,1)</code> 按照region 累加 power<br>
+<code>etrans(reg,reg)=etrans(reg,reg)+optpowerunit_IX(i2,1);</code></li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi>e</mi><mi>l</mi><mi>s</mi><mi>e</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{else}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord" style="color:red;"><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.01968em;color:red;">l</span><span class="mord mathdefault" style="color:red;">s</span><span class="mord mathdefault" style="color:red;">e</span></span></span></span></span><br>
+需要进行reg间的能源传输，起点是是此powerunit对应的reg，终点是所对应的lines 终点所在的reg 如何确定终点呢？ 选择距离powerunit最近的77条major bus的起点，这条major bus的终点所在的reg就是传输的reg<br>
+<code>e0(reg,3)=e0(reg,3)+optpowerunit_IX(i2,1)</code>按照conty 累加power<br>
+<code>e0(reg,4)=e0(reg,4)+optpowerunit_IX(i2,1)</code> 按照region 累加 power<br>
+<code>etrans(reg,reg)=etrans(reg,reg)+optpowerunit_IX(i2,1);</code><br>
+可以传递的能量 <code>powertrans=optpowerunit_IX(i2,1)-powercy</code><br>
+如何传输的终点reg demand &gt;自身发电+powertrans：<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi>i</mi><mi>f</mi><mi>e</mi><mn>0</mn><mo>(</mo><mi>r</mi><mi>e</mi><mi>g</mi><mn>2</mn><mo separator="true">,</mo><mn>1</mn><mo>)</mo><mo>&gt;</mo><mo>=</mo><mo>(</mo><mi>e</mi><mn>0</mn><mo>(</mo><mi>r</mi><mi>e</mi><mi>g</mi><mn>2</mn><mo separator="true">,</mo><mn>4</mn><mo>)</mo><mo>+</mo><mi>p</mi><mi>o</mi><mi>w</mi><mi>e</mi><mi>r</mi><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mo>)</mo></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{if e0(reg2,1)&gt;=(e0(reg2,4)+powertrans)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord" style="color:red;"><span class="mord mathdefault" style="color:red;">i</span><span class="mord mathdefault" style="margin-right:0.10764em;color:red;">f</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord" style="color:red;">0</span><span class="mopen" style="color:red;">(</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.03588em;color:red;">g</span><span class="mord" style="color:red;">2</span><span class="mpunct" style="color:red;">,</span><span class="mspace" style="color:red;margin-right:0.16666666666666666em;"></span><span class="mord" style="color:red;">1</span><span class="mclose" style="color:red;">)</span><span class="mspace" style="color:red;margin-right:0.2777777777777778em;"></span><span class="mrel" style="color:red;">&gt;</span><span class="mrel" style="color:red;">=</span><span class="mspace" style="color:red;margin-right:0.2777777777777778em;"></span><span class="mopen" style="color:red;">(</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord" style="color:red;">0</span><span class="mopen" style="color:red;">(</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.03588em;color:red;">g</span><span class="mord" style="color:red;">2</span><span class="mpunct" style="color:red;">,</span><span class="mspace" style="color:red;margin-right:0.16666666666666666em;"></span><span class="mord" style="color:red;">4</span><span class="mclose" style="color:red;">)</span><span class="mspace" style="color:red;margin-right:0.2222222222222222em;"></span><span class="mbin" style="color:red;">+</span><span class="mspace" style="color:red;margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="color:red;">p</span><span class="mord mathdefault" style="color:red;">o</span><span class="mord mathdefault" style="margin-right:0.02691em;color:red;">w</span><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mord mathdefault" style="color:red;">t</span><span class="mord mathdefault" style="margin-right:0.02778em;color:red;">r</span><span class="mord mathdefault" style="color:red;">a</span><span class="mord mathdefault" style="color:red;">n</span><span class="mord mathdefault" style="color:red;">s</span><span class="mclose" style="color:red;">)</span></span></span></span></span><br>
+<img src="https://steveowh.github.io/post-images/1700633686569.png" alt="" loading="lazy"><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle mathcolor="red"><mrow><mi>e</mi><mi>l</mi><mi>s</mi><mi>e</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\color{red}{else}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord" style="color:red;"><span class="mord mathdefault" style="color:red;">e</span><span class="mord mathdefault" style="margin-right:0.01968em;color:red;">l</span><span class="mord mathdefault" style="color:red;">s</span><span class="mord mathdefault" style="color:red;">e</span></span></span></span></span><br>
+<img src="https://steveowh.github.io/post-images/1700633759210.png" alt="" loading="lazy"><br>
+若还是不满足，则传输给最近的/需求最大的一条线路<br>
+<img src="https://steveowh.github.io/post-images/1700634160709.png" alt="" loading="lazy"></li>
+</ol>
+<h1 id="marginalcost_battery_withtrans">Marginalcost_battery_withtrans</h1>
+<p>首先计算储能相关的成本，以及根据之前计算的结果计算储能相关的dis /ch相关的系数<br>
+<img src="https://steveowh.github.io/post-images/1700635384692.png" alt="" loading="lazy"><br>
+还是通过设置动态的learner rate进行设置</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">
+                <h3 class="post-title">
+                  RLlib学习
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

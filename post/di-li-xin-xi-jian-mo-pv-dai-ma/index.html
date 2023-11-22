@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>地理信息建模-PV代码 | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>地理信息建模-PV代码</h1>
+            <p class="article-meta">
+              2023-10-26
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://steveowh.github.io/post-images/1698305170539.png" alt="" loading="lazy"><br>
+首先是计算自然保护区的面积<br>
+<img src="https://steveowh.github.io/post-images/1698305467703.png" alt="" loading="lazy"><br>
+加载其他的地理信息，并且将地理保护区的信息设置成100<br>
+<img src="https://steveowh.github.io/post-images/1698306010565.png" alt="" loading="lazy"><br>
+设置可行的区域<br>
+<img src="https://steveowh.github.io/post-images/1698306121298.png" alt="" loading="lazy"><br>
+设置xnet ynet xnet为gird 的x坐标 ynet 为grid的y坐标</p>
+<p><img src="https://steveowh.github.io/post-images/1698398047151.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1698398726274.png" alt="" loading="lazy"></p>
+<ol>
+<li>
+<p>powerunit<br>
+主要输出的是powerunit 、 unitid  unitid_all<br>
+powerunit  id 是电厂的(x,y,nums,type)  并不是每个电厂，而是按照不同的type划分，按照type分的，综述应该是多少可行的type相关的</p>
+</li>
+<li>
+<p>lines<br>
+主要输出的是transsmission lines<br>
+lines(start_x,start_y,end_x,end_y,<br>
+major_line,sub_line,<br>
+powerunitd_id,start_country,start_pro_id,start_regin<br>
+end_country,end_pro,end_regin<br>
+distance,volt_level)</p>
+</li>
+<li>
+<p>powerunitcost<br>
+cost(powerunit_id,transmission_id,<br>
+ele_production,carbon,carbon,<br>
+transmission_cost,distance_cost,<br>
+0,0<br>
+cap production ,landcost)</p>
+</li>
+<li>
+<p>lcoe<br>
+unit_lcoe 选取最低的所有的id 累加计算lcoe 选择累加后的最低 的loce ，并且将这些powerunit建设</p>
+</li>
+<li>
+<p>opt 好像就是按照loce进行排序</p>
+</li>
+<li>
+<p>感觉大部分是顺序排列相关的，需不需要引入一些算法相关的</p>
+</li>
+</ol>
+<p><strong>optimization and MAC</strong><br>
+idxm =  major节点的应用<br>
+numlines 是major节点<br>
+r_pv  是未来的功率相对于 2020年的功率相关的成本信息<br>
+optpowerunit （i，30 ）  = cap production<br>
+optpowerunit （i，1） =  也是产生的量</p>
+<p><strong>PV相关文件</strong><br>
+powerunit相关：</p>
+<ol>
+<li>
+<p>powerunit:保存的是每个一个type下每一个位置的中心（x，y，num，type值）</p>
+</li>
+<li>
+<p>unitid 对于全国范围内的xy_suitable可行的范围id 是对应的powerunit id  （4800*1950）</p>
+</li>
+<li>
+<p>unitid_all对于xy_all 可行范围，id是对应的powerunit id（4800*1950）<br>
+<strong>transmission相关文件</strong></p>
+</li>
+<li>
+<p>lines</p>
+</li>
+<li>
+<p>0-77：  起点x，起点y，终点x，终点y，所属的那一条线路，    15 ：线路长度 16：功率等级</p>
+</li>
+<li>
+<p>77-~： powerunit起点x，powerunit起点y，所连接的majorline x，所连接的majorline y<br>
+所属于的线路，所链接的major line，所属于的线路，powerunit到major lines 的距离<br>
+powerunit对应的country id，对应的pro id，pro对应的regions值，终点对应的conutry id<br>
+终点对应的pro id， 终点对应的regions 值，</p>
+</li>
+<li>
+<p>lines：首先transmission 分为major line 与substation line<br>
+首先有77条 major line 根据每一个trans 中的坐标点，建立可行的线路，<br>
+线路分为first part central part  与last part 按照一定的规矩建立链接线路，建立77条major line 将line中的经纬度坐标转换为县域的坐标<br>
+找到距离最近的major lines<br>
+建立新的substation lines 使得powerunit 连接到major lines<br>
+起点是powerunit 中心id，然后终点是major lines 的起点id</p>
+</li>
+</ol>
+<p><strong>powercost</strong></p>
+<ol>
+<li>costs<br>
+powerunit id  trans id ，全年产生的能量，使用土地导致的co2变化<br>
+co2相关，额定trans容量 cost，到中心点lines cost， 距离，<br>
+需要外送电量地区的传输费用，所连接的majorlines     产生的功率  ，landcost</li>
+<li>SR2<br>
+日照时长 ， 格子数</li>
+</ol>
+<p><strong>power_unitid_lcoe</strong></p>
+<ol>
+<li>unitid_loce<br>
+在保证最低lcoe下的所建设的地图</li>
+<li>loceunit<br>
+全年发电量；连接到主网的cost；传输成本；传输成本；<br>
+pv建设成本；pvinvter成本；土地成本；co2消耗量<br>
+全寿命周期：    co2消耗量，co2改变量，链接成本，substation 成本<br>
+全寿命周期： distance成本；pv成本、pvinvert成本；土地成本<br>
+0，0，0，；lcoe</li>
+</ol>
+<p>power<br>
+1：20 loceunit<br>
+21：29 lcoeunit 11：19<br>
+30： sum（id，cost（11）） 仅仅是 id 下的sum 不是所有的sum</p>
+<p><strong>opt_energy_grids_pv</strong></p>
+<ol>
+<li>optpowerunit_pv<br>
+按照lcoe进排序，重新排列power   1：30  =power（1：30） 31：所对应的powerunit id 32：co2 相关。 34： 累计的发电量</li>
+<li>powerunit_IX_PV<br>
+按照lcoe排序后的powerunit id 索引</li>
+<li>lines_IX<br>
+按照lcoe排列后的lines</li>
+<li>powerunit_num_IX_PV<br>
+按照lcoe进行排序 重新排列powerunit</li>
+<li>loce_PV<br>
+lcoe_powerunit_PV 所建设的powerunit的lcoe</li>
+</ol>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">
+                <h3 class="post-title">
+                  地理信息建模-输储成本计算
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

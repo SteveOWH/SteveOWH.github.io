@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MARL | SteveW</title>
+<meta name="description" content="温故而知新">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://steveowh.github.io/favicon.ico?v=1700635771756">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://steveowh.github.io/styles/main.css">
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://steveowh.github.io">SteveW</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>MARL</h1>
+            <p class="article-meta">
+              2023-08-31
+              
+            </p>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://steveowh.github.io/post-images/1693484268469.png" alt="" loading="lazy"><br>
+部分可观测的MDPs<br>
+深度强化学习可以解决一些复杂的任务，但是，这些控制器受限制于memory size 并且决策的时候需要感知整个游戏屏幕的信息。<br>
+如何解决的添加了一个LSTM网络，替代了DQN网络中的全连接层？ ——》DRQN算法</p>
+<p><strong>仅仅捕捉一帧的信息，达到了DQN的性能</strong><br>
+DQN训练atari时候仅仅包含了4个帧的信息，任何超过4个帧的游戏对于DQN来说就是非MDP了，因为决策的过程不仅仅不当前的状态相关。-》部分可观测的马尔可夫过程</p>
+<p>使用RNN能够使DQN更加有效的应对部分可观测的马尔可夫过程。<br>
+全状态训练。部分状态test<br>
+部分可观测的MDP 6元组<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>&lt;</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo separator="true">,</mo><mi>p</mi><mo separator="true">,</mo><mi>r</mi><mo separator="true">,</mo><mi>m</mi><mo separator="true">,</mo><mi>o</mi><mo>&gt;</mo></mrow><annotation encoding="application/x-tex">&lt;s,a,p,r,m,o&gt;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">m</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">o</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span></span></span></span><br>
+m是<br>
+o 是observation<br>
+<img src="https://steveowh.github.io/post-images/1693485630991.png" alt="" loading="lazy"><br>
+递归网络能够弥补q（o，a ）与q（s，a）之间的差距<br>
+仅仅将最后的全连接层转换成了LSTM网络<br>
+<img src="https://steveowh.github.io/post-images/1693485708833.png" alt="" loading="lazy"></p>
+<p><strong>Qmix</strong><br>
+<img src="https://steveowh.github.io/post-images/1694568192329.png" alt="" loading="lazy"><br>
+<strong>gap：</strong><br>
+对于深刻的理解每个agent 的action 带来的reward 需要 centralised action-value function ，但是在多智能体的情况下centralised action-value function 训练较为困难，并且，centralised action-value function不能体现出每个agent对于reward的影响，对于每个<strong>individual action besed individual observation</strong><br>
+如果单纯的考虑individual的情况，就失去了marl的意义，因为没有考虑其他的agent action 对于自己的影响，（agents actions 会 影响 envs）<br>
+对于policy 的方法，具有较低的样本采样率？<br>
+如何解决，学一个累加形式的Q_tot,Q_tot由多个agent的Q累加而成。每个angent采取动作的时候用的是自己的Q，（<strong>VDN</strong>方法，每个智能体有自己的Q，然后Q_tot 是每个agnet的Q的总和）<br>
+强假设，Q_tot与Q_a 是单调的？<br>
+<img src="https://steveowh.github.io/post-images/1694568874961.png" alt="" loading="lazy"><br>
+Qmix并不是像VDN那样单纯的分解，而是每个Qa的非线性组合<br>
+如果每个Qa满足max约束，则Q_tot满足最大约束<br>
+<img src="https://steveowh.github.io/post-images/1694569174294.png" alt="" loading="lazy"><br>
+<img src="https://steveowh.github.io/post-images/1694569269506.png" alt="" loading="lazy"><br>
+VDN其实也满足式4 但是Qmix提出的单调性约束适用范围更大。<br>
+计算Qtot的时候还是用的全部的observation，但是计算action的时候式用的 自己的observation<br>
+为了保证单调性 Qmix 的max这一步的weights需要≥0<br>
+<img src="https://steveowh.github.io/post-images/1694569711039.png" alt="" loading="lazy"></p>
+<p><strong>VDN</strong><br>
+<img src="https://steveowh.github.io/post-images/1694571423518.png" alt="" loading="lazy"><br>
+VDN解决的是什么问题？ lazy agent问题 在full centralized文中中，由于没有考虑到single agent 的问题，对于有些reward高的情况了，里面可能有几个agent的policy非常优秀，但是几个agent的policy较差，但是总的reward较高。<br>
+合作型的marl问题<br>
+一个较强的假设：<br>
+<img src="https://steveowh.github.io/post-images/1694572335042.png" alt="" loading="lazy"><br>
+总体的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Q_{tot}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>由单个的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mi>a</mi></msub></mrow><annotation encoding="application/x-tex">Q_{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>累加组成。<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mi>a</mi></msub></mrow><annotation encoding="application/x-tex">Q_{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的网络由自己观测的observation和自己的action确定<br>
+对于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Q_{tot}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>,由full observation和 joint action 确定<br>
+<img src="https://steveowh.github.io/post-images/1694572558776.png" alt="" loading="lazy"><br>
+有些state和action不足以让Q函数预测q值，因此结合QRDN算法，需要用RNN/LSTM整合历史信息作为输入。</p>
+<p><img src="https://steveowh.github.io/post-images/1694572613543.png" alt="" loading="lazy"><br>
+里面是有一些的trick 例如说值分解等</p>
+<p><img src="https://steveowh.github.io/post-images/1694606809682.png" alt="" loading="lazy"><br>
+IQL算法，IQL是将   DQN算法应用到多智能体上，但是仅仅修改了reward函数，没有其他的变化，将每个pong中的agent做single agent的策略，但是由于envs 是在动态变化的（受另一个agent的影响）存在收敛性问题，但是在工程上比较好用。网络架构如下所示：<br>
+<img src="https://steveowh.github.io/post-images/1694606969880.png" alt="" loading="lazy"></p>
+<p><strong>COMA</strong><br>
+<img src="https://steveowh.github.io/post-images/1695040765876.png" alt="" loading="lazy"><br>
+gap : 如何解决在policy下不同agent 单个action 作用的影响。<br>
+<img src="https://steveowh.github.io/post-images/1695040814479.png" alt="" loading="lazy"><br>
+为了有效的近似基线的Q值，采用均值代替。</p>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://steveowh.github.io/post/wen-xian-xiang-guan-de/">
+                <h3 class="post-title">
+                  子刊及以上
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://steveowh.github.io/images/avatar.png?v=1700635771756" class="no-responsive avatar">
+    <div class="text-muted">温故而知新</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/opt-and-mac/">OPT &amp; MAC</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/rllib-xue-xi/">RLlib学习</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-pv-dai-ma/">地理信息建模-PV代码</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo-/">地理信息建模-输储成本计算</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/di-li-xin-xi-jian-mo/">地理信息建模-风电光伏建模</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/neng-lu-li-lun/">能路理论</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/zhi-neng-jue-ce-xi-tong/">智能决策系统</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/guo-zi-ran-ji-jin/">国自然基金</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/da-ke-xue-zhuang-zhi-xiang-guan/">大科学装置相关</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://steveowh.github.io/post/ijcai2023/">IJCAI2023 </a>
+            </li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://steveowh.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>
